@@ -1,0 +1,21 @@
+Jurusan Sistem Informasi adalah bidang keilmuan yang menggabungkan ilmu komputer dengan bisnis dan manajemen. Di prodi ini kamu akan belajar gimana mengidentifikasi kebutuhan dan proses bisnis perusahaan berdasarkan data-data yang dimiliki perusahan, kemudian merancang sistem yang sesuai dengan kebutuhan perusahaan.
+
+Jadi, selain belajar teknik pemrograman, kamu juga dituntut untuk mempelajari proses bisnis yang ada di perusahaan. Oleh karena itu, lulusan Prodi Sistem Informasi diharapkan dapat mengembangkan sebuah sistem pengolahan data dari berbagai sumber untuk dapat disajikan sebagai informasi yang bermanfaat bagi perusahaan.
+
+mata kuliah :
+ Perencanaan Sumber Daya Perusahaan
+ Manajemen Proyek Teknologi Informasi
+ Manajemen Pengadaan dan Investasi Teknologi Informasi
+ Manajemen Risiko Teknologi Informasi
+Keamanan Aset Informasi
+ Analisis dan Desain Perangkat Lunak
+Desain dan Manajemen Jaringan Komputer
+Desain dan Manajemen Proses Bisnis
+Bahasa Pemrograman
+Sistem dan Teknologi Informasi
+
+prospek kerja :
+Konsultan IT 6 - 18 jt
+Software Developer 10 - 15 jt
+Data Scientist 7 - 20 jt
+Data Analist 7 - 20jt
