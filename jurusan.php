@@ -18,7 +18,7 @@
                                 </div>
                             </h6>
                             <p class="card-text">Sekolah Tinggi Ilmu Komunikasi dan Sekretari Tarakanita (dh. Akademi Sekretari/Lembaga Pendidikan Kejuruan Tarakanita) ...</p>
-                            <a href="#" class="btn btn-primary float-right">Selengkapnya</a>
+                            <a href="index.php?page=detail_jurusan" class="btn btn-primary float-right">Selengkapnya</a>
                         </div>
                     </div>
                 </div>

@@ -21,6 +21,9 @@
             case "detail_perguruan_tinggi":
                 include 'detail_perguruan_tinggi.php';
                 break;
+            case "detail_jurusan":
+                include 'detail_jurusan.php';
+                break;
             case "perguruan_tinggi":
             default:
                 include 'perguruan_tinggi.php';
