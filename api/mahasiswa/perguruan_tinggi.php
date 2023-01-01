@@ -6,27 +6,104 @@ $response = "";
 if(isset($_GET['apiname'])){
     $apiname = $_GET['apiname'];
     switch($apiname){
-        case 'login':
-        // start web service login customer
-        if(isset($_POST['email']) && isset($_POST['password'])){
-            $email = strtolower($_POST['email']);
-            $password = $_POST['password'];
-            $user_type = $_POST['user_type'];
-            $sql = "SELECT nama, no_hp, agama, tanggal_lahir, tempat_lahir, user_type, jenis_kelamin
-                from users
-                where email = '$email' and password = '$password' and user_type = '$user_type' 
-                and is_active = 'T' ";
-            $res = runSQLtext($sql);
-            $r = "";
-            if ($res->num_rows > 0) {
+        case 'list':
+        // start web service list
+        $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
+            from perguruan_tinggi
+            where is_active = 'T' 
+            order by id";
+        $res = runsqltext($sql);
+        $list = array();
+        if($res->num_rows > 0){
+            while ($row = $res->fetch_object()) {
+                array_push($list, $row);
+            }
+        }else{
+            $list = null;
+        }
+        $responseCode = "0000";
+        $message = "Sukses";
+        // end web service list
+        if(strcmp($responseCode, "0000") == 0){
+            $params =   [   'responseCode' => $responseCode,
+                            'message' => $message,
+                            'data' =>[
+                                'list' => $list
+                            ]
+                        ];   
+        }else{
+            $params =   [   'responseCode' => $responseCode,
+                            'message' => $message
+                        ];  
+        }
+        break;
+        case 'detail':
+        // start web service detail
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+            $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
+                from perguruan_tinggi
+                where is_active = 'T' 
+                and id = $id
+                order by id" ;
+            $res = runsqltext($sql);
+            if($res->num_rows > 0){
                 $row = $res->fetch_assoc();
+                $id = $row['id'];
                 $nama = $row['nama'];
-                $no_hp = $row['no_hp'];
-                $agama = $row['agama'];
-                $tanggal_lahir = $row['tanggal_lahir'];
-                $tempat_lahir = $row['tempat_lahir'];
-                $user_type = $row['user_type'];
-                $jenis_kelamin = $row['jenis_kelamin'];
+                $description = $row['description'];
+                $foto = $row['foto'];
+                $website = $row['website'];
+                $no_telp = $row['no_telp'];
+                $akreditasi = $row['akreditasi'];
+                $email = $row['email'];
+
+                $sqlProgramStudi = "SELECT jk.id, ps.nama, j.nama, jk.akreditasi, jk.kelas, 
+                    jk.biaya_masuk, jk.biaya_per_semester
+                    from jurusan_kuliah jk
+                    join jurusan j on j.id = jk.id_jurusan
+                    join program_studi ps on ps.id = j.id_program_studi
+                    where jk.id_perguruan_tinggi = $id
+                    order by ps.id";
+                $res2 = runsqltext($sqlProgramStudi);
+                $list_program_studi = array();
+                if($res2->num_rows > 0){
+                    while ($row2 = $res2->fetch_object()) {
+                        array_push($list_program_studi, $row2);
+                    }
+                }else{
+                    $list_program_studi = null;
+                }
+
+                $sqlFasilitas= "SELECT id, nama, foto
+                    from fasilitas
+                    where id_perguruan_tinggi = $id
+                    and is_active = 'T'
+                    order by id";
+                $res3 = runsqltext($sqlFasilitas);
+                $list_fasilitas = array();
+                if($res3->num_rows > 0){
+                    while ($row3 = $res3->fetch_object()) {
+                        array_push($list_fasilitas, $row3);
+                    }
+                }else{
+                    $list_fasilitas = null;
+                }
+
+                $sqlUkm= "SELECT id, nama, foto
+                    from ukm
+                    where id_perguruan_tinggi = $id
+                    and is_active = 'T'
+                    order by id";
+                $res4 = runsqltext($sqlUkm);
+                $list_ukm = array();
+                if($res4->num_rows > 0){
+                    while ($row4 = $res4->fetch_object()) {
+                        array_push($list_ukm, $row4);
+                    }
+                }else{
+                    $list_ukm = null;
+                }
                 
                 $responseCode = "0000";
                 $message = "Sukses";
@@ -34,22 +111,26 @@ if(isset($_GET['apiname'])){
                 $responseCode = "0001";
                 $message = "Data Tidak Ditemukan";
             }
-        }else{
+        } else {
             $responseCode = "0009";
-            $message = "Missing Request for Login";
+            $message = "Missing Request for Detail";
         }
-        // end web service login
+        // end web service detail
         if(strcmp($responseCode, "0000") == 0){
             $params =   [   'responseCode' => $responseCode,
                             'message' => $message,
                             'data' =>[
+                                'id' => $id,
                                 'nama' => $nama,
-                                'no_hp' => $no_hp,
-                                'agama' => $agama,
-                                'tanggal_lahir' => $tanggal_lahir,
-                                'tempat_lahir' => $tempat_lahir,
-                                'user_type' => $user_type,
-                                'jenis_kelamin' => $jenis_kelamin
+                                'description' => $description,
+                                'foto' => $foto,
+                                'website' => $website,
+                                'no_telp' => $no_telp,
+                                'akreditasi' => $akreditasi,
+                                'email' => $email,
+                                'list_program_studi' => $list_program_studi,
+                                'list_fasilitas' => $list_fasilitas,
+                                'list_ukm' => $list_ukm
                             ]
                         ];   
         }else{

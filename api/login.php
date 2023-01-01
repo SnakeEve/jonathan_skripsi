@@ -12,7 +12,7 @@ if(isset($_GET['apiname'])){
             $email = strtolower($_POST['email']);
             $password = $_POST['password'];
             $user_type = $_POST['user_type'];
-            $sql = "SELECT nama, no_hp, agama, tanggal_lahir, tempat_lahir, user_type, jenis_kelamin
+            $sql = "SELECT id, nama, no_hp, agama, tanggal_lahir, tempat_lahir, user_type, jenis_kelamin
                 from users
                 where email = '$email' and password = '$password' and user_type = '$user_type' 
                 and is_active = 'T' ";
@@ -20,6 +20,7 @@ if(isset($_GET['apiname'])){
             $r = "";
             if ($res->num_rows > 0) {
                 $row = $res->fetch_assoc();
+                $id = $row['id'];
                 $nama = $row['nama'];
                 $no_hp = $row['no_hp'];
                 $agama = $row['agama'];
@@ -43,6 +44,7 @@ if(isset($_GET['apiname'])){
             $params =   [   'responseCode' => $responseCode,
                             'message' => $message,
                             'data' =>[
+                                'id' => $id,
                                 'nama' => $nama,
                                 'no_hp' => $no_hp,
                                 'agama' => $agama,
