@@ -22,7 +22,7 @@
             <div class="row justify-content-center">
                 <div class="card w-50">
                     <div class="card-body">
-                        <form id="login-form" class="form" action="" method="post">
+                        <form id="login-form" class="form" action="api/login_mahasiswa.php" method="post">
                             <h3 class="text-left">Login Area</h3>
                             <h6 class="text-left text-secondary">Masukkan Email dan Password kamu untuk login</h6>
                             <div class="form-group">

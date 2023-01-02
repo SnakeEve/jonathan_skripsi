@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <?php include 'header.php';?>
+<?php include 'scripts.php';?>
 <body>
     <?php include 'navbar.php';?>
     <?php include 'user_modal.php';?>
@@ -31,8 +32,6 @@
         }
     
     ?>
-
-    <?php include 'scripts.php';?>
     <?php include 'footer.php';?>
 </body>
 </html> 

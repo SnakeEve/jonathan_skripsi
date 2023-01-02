@@ -1,3 +1,10 @@
+<?php
+    session_start();
+    if(!isset($_SESSION['user'])){
+        echo "<script> location.href='login.php'; </script>";
+        exit;
+    }
+?>
 <head>
     <title>Skripsi</title>
     <!-- Required meta tags -->
