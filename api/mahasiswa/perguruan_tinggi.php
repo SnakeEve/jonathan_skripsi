@@ -58,17 +58,38 @@ if(isset($_GET['apiname'])){
                 $akreditasi = $row['akreditasi'];
                 $email = $row['email'];
 
-                $sqlProgramStudi = "SELECT jk.id, ps.nama, j.nama, jk.akreditasi, jk.kelas, 
-                    jk.biaya_masuk, jk.biaya_per_semester
+                $sqlProgramStudi = "SELECT ps.id as id_fakultas, ps.nama as nama_fakultas 
                     from jurusan_kuliah jk
                     join jurusan j on j.id = jk.id_jurusan
                     join program_studi ps on ps.id = j.id_program_studi
                     where jk.id_perguruan_tinggi = $id
+                    and jk.is_active = 'T'
+                    group by ps.id, nama_fakultas
                     order by ps.id";
                 $res2 = runsqltext($sqlProgramStudi);
                 $list_program_studi = array();
                 if($res2->num_rows > 0){
                     while ($row2 = $res2->fetch_object()) {
+                        //get jurusan
+                        $sqlJurusan = "SELECT jk.id as id_jurusan_kuliah, j.id as id_jurusan, j.nama as nama_jurusan, 
+                            jk.akreditasi, jk.kelas, jk.biaya_masuk, jk.biaya_per_semester
+                            from jurusan_kuliah jk
+                            join jurusan j on j.id = jk.id_jurusan
+                            join program_studi ps on ps.id = j.id_program_studi
+                            where jk.id_perguruan_tinggi = $id
+                            and jk.is_active = 'T'
+                            and ps.id = $row2->id_fakultas
+                            order by jk.id";
+                        $res_jurusan = runsqltext($sqlJurusan);
+                        $list_jurusan = array();
+                        if($res_jurusan->num_rows > 0){
+                            while ($row_jurusan = $res_jurusan->fetch_object()) {
+                                array_push($list_jurusan, $row_jurusan);
+                            }
+                        }else {
+                            $list_jurusan = null;
+                        }
+                        $row2->list_jurusan = $list_jurusan;
                         array_push($list_program_studi, $row2);
                     }
                 }else{

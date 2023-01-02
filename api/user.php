@@ -50,48 +50,48 @@ if(isset($_GET['apiname'])){
                     ];
         break;
         case 'update':
-            // start web service update
-            $body = file_get_contents('php://input')."\n";
-            if($body != ''){
-                $data = json_decode($body, true);
-                $id = $data['id'];
-                $email = $data['email'];
-                $password = $data['password'];
-                $nama = $data['nama'];
-                $no_hp = $data['no_hp'];
-                $agama = $data['agama'];
-                $tempat_lahir = $data['tempat_lahir'];
-                $tanggal_lahir = $data['tanggal_lahir'];
-                $jenis_kelamin = $data['jenis_kelamin'];
-    
-                $sqlCekUser = "SELECT id FROM users
-                    WHERE email = '$email' ";
-                $res = runSQLtext($sqlCekUser);
-    
-                if($res->num_rows > 0) {
-                    $responseCode = "0001";
-                    $message = "Email sudah terdaftar di akun lain";
-                } else {
-                    $sql = "UPDATE users SET nama='$nama',  no_hp='$no_hp', agama='$agama',  tempat_lahir='$tempat_lahir', 
-                            tanggal_lahir='$tanggal_lahir', jenis_kelamin='$jenis_kelamin', email='$email', password='$password',
-                            updated_date = now() where id = $id ";
-                    runSQLtext($sql);
-                    $responseCode = "0000";
-                    $message = "Sukses";
-                }
-                
-            }else {
-                $responseCode = "0009";
-                $message = "Missing Request for Update";
+        // start web service update
+        $body = file_get_contents('php://input')."\n";
+        if($body != ''){
+            $data = json_decode($body, true);
+            $id = $data['id'];
+            $email = $data['email'];
+            $password = $data['password'];
+            $nama = $data['nama'];
+            $no_hp = $data['no_hp'];
+            $agama = $data['agama'];
+            $tempat_lahir = $data['tempat_lahir'];
+            $tanggal_lahir = $data['tanggal_lahir'];
+            $jenis_kelamin = $data['jenis_kelamin'];
+
+            $sqlCekUser = "SELECT id FROM users
+                WHERE email = '$email' ";
+            $res = runSQLtext($sqlCekUser);
+
+            if($res->num_rows > 0) {
+                $responseCode = "0001";
+                $message = "Email sudah terdaftar di akun lain";
+            } else {
+                $sql = "UPDATE users SET nama='$nama',  no_hp='$no_hp', agama='$agama',  tempat_lahir='$tempat_lahir', 
+                        tanggal_lahir='$tanggal_lahir', jenis_kelamin='$jenis_kelamin', email='$email', password='$password',
+                        updated_date = now() where id = $id ";
+                runSQLtext($sql);
+                $responseCode = "0000";
+                $message = "Sukses";
             }
-            // end web service update
-            $params =   [   'responseCode' => $responseCode,
-                            'message' => $message,
-                            'data' =>[
-                                'body' => json_decode($body, true)
-                            ]
-                        ];
-            break;
+            
+        }else {
+            $responseCode = "0009";
+            $message = "Missing Request for Update";
+        }
+        // end web service update
+        $params =   [   'responseCode' => $responseCode,
+                        'message' => $message,
+                        'data' =>[
+                            'body' => json_decode($body, true)
+                        ]
+                    ];
+        break;
         case 'detail':
         // start web service detail
         if(isset($_GET['id'])){
