@@ -123,9 +123,7 @@ if(isset($_GET['apiname'])){
             $id = $_GET['id'];
             $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
                 from perguruan_tinggi
-                where is_active = 'T' 
-                and id = $id
-                order by id" ;
+                where id = $id" ;
             $res = runsqltext($sql);
             if($res->num_rows > 0){
                 $row = $res->fetch_assoc();
@@ -469,6 +467,41 @@ if(isset($_GET['apiname'])){
             $message = "Missing Request for Delete Ukm";
         }
         // end web service deleteUkm
+        $params =   [   'responseCode' => $responseCode,
+                        'message' => $message,
+                        'data' =>[
+                            'body' => json_decode($body, true)
+                        ]
+                    ];
+        break;
+        case 'addUkm':
+        // start web service addUkm
+        $body = file_get_contents('php://input')."\n";
+        if($body != ''){
+            $data = json_decode($body, true);
+            $id_perguruan_tinggi = $data['id_perguruan_tinggi'];
+            $nama = $data['nama'];
+
+            $sqlCekFasilitas = "SELECT id FROM ukm
+                WHERE nama = '$nama' and id_perguruan_tinggi = $id_perguruan_tinggi ";
+            $res = runSQLtext($sqlCekFasilitas);
+
+            if($res->num_rows > 0) {
+                $sql = "UPDATE ukm SET is_active = 'T' WHERE  id_perguruan_tinggi = $id_perguruan_tinggi and nama = '$nama'";
+                runSQLtext($sql);
+            } else {
+                $sql = "INSERT into ukm (id_perguruan_tinggi, nama, is_active)
+                VALUES ($id_perguruan_tinggi, '$nama', 'T') ";
+                runSQLtext($sql);
+            }
+            $responseCode = "0000";
+            $message = "Sukses";
+            
+        }else {
+            $responseCode = "0009";
+            $message = "Missing Request for Add UKM";
+        }
+        // end web service addUkm
         $params =   [   'responseCode' => $responseCode,
                         'message' => $message,
                         'data' =>[

@@ -92,6 +92,37 @@ if(isset($_GET['apiname'])){
                         ]
                     ];
         break;
+        case 'list':
+        // start web service list
+        $sql = "SELECT id, nama, no_hp, agama, tanggal_lahir, tempat_lahir, user_type, jenis_kelamin
+            from users
+            order by id" ;
+        $res = runsqltext($sql);
+        $list = array();
+        if($res->num_rows > 0){
+            while ($row = $res->fetch_object()) {
+                array_push($list, $row);
+            }
+            $responseCode = "0000";
+            $message = "Sukses";
+        }else{
+            $responseCode = "0001";
+            $message = "Data Tidak Ditemukan";
+        }
+        // end web service list
+        if(strcmp($responseCode, "0000") == 0){
+            $params =   [   'responseCode' => $responseCode,
+                            'message' => $message,
+                            'data' =>[
+                                'list' => $list
+                            ]
+                        ];   
+        }else{
+            $params =   [   'responseCode' => $responseCode,
+                            'message' => $message
+                        ];  
+        }
+        break;
         case 'detail':
         // start web service detail
         if(isset($_GET['id'])){

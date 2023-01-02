@@ -37,43 +37,46 @@ if(isset($_GET['apiname'])){
                                 'message' => $message
                             ];  
             }
-            break;
+        break;
         case 'list_perguruan_tinggi_jurusan':
+            // start web service list
             if(isset($_GET['univ_id'])){
                 $univ_id = $_GET['univ_id'];
-                // start web service list
                 $sql = "SELECT j.id, j.nama, j.description, j.foto, ps.nama as nama_program_studi
-                        FROM jurusan_kuliah jk
-                        LEFT JOIN jurusan j
-                        ON j.id = jk.id_jurusan
-                        LEFT JOIN program_studi ps
-                        ON ps.id = j.id_program_studi
-                        WHERE j.is_active = 'T' 
-                        AND jk.id_perguruan_tinggi = $univ_id";
-                $res = runsqltext($sql);
-                $list = array();
-                if($res->num_rows > 0){
-                    while ($row = $res->fetch_object()) {
-                        array_push($list, $row);
-                    }
-                }else{
-                    $list = null;
+                    FROM jurusan_kuliah jk
+                    JOIN jurusan j ON j.id = jk.id_jurusan
+                    JOIN program_studi ps ON ps.id = j.id_program_studi
+                    WHERE j.is_active = 'T' 
+                    AND jk.id_perguruan_tinggi = $univ_id";
+            } else {
+                $sql = "SELECT j.id, j.nama, j.description, j.foto, ps.nama as nama_program_studi
+                    FROM jurusan j
+                    JOIN program_studi ps ON ps.id = j.id_program_studi
+                    WHERE j.is_active = 'T'";
+            }
+            $res = runsqltext($sql);
+            $list = array();
+            if($res->num_rows > 0){
+                while ($row = $res->fetch_object()) {
+                    array_push($list, $row);
                 }
-                $responseCode = "0000";
-                $message = "Sukses";
-                // end web service list
-                if(strcmp($responseCode, "0000") == 0){
-                    $params =   [   'responseCode' => $responseCode,
-                                    'message' => $message,
-                                    'data' =>[
-                                        'list' => $list
-                                    ]
-                                ];   
-                }else{
-                    $params =   [   'responseCode' => $responseCode,
-                                    'message' => $message
-                                ];  
-                }
+            }else{
+                $list = null;
+            }
+            $responseCode = "0000";
+            $message = "Sukses";
+            // end web service list
+            if(strcmp($responseCode, "0000") == 0){
+                $params =   [   'responseCode' => $responseCode,
+                                'message' => $message,
+                                'data' =>[
+                                    'list' => $list
+                                ]
+                            ];   
+            }else{
+                $params =   [   'responseCode' => $responseCode,
+                                'message' => $message
+                            ];  
             }
             break;
         case 'detail':
