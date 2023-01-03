@@ -7,10 +7,16 @@
 </main>
 
 <script>
-    var univ_id = "<?php echo $_GET['univ_id'];?>";
+    var univ_id = "<?php echo  isset($_GET['univ_id'])? $_GET['univ_id']:"";?>";
+    var url="";
+    if(univ_id==""){
+        url = url_local_project_root + "/api/mahasiswa/jurusan.php?apiname=list_perguruan_tinggi_jurusan";
+    } else {
+        url = url_local_project_root + "/api/mahasiswa/jurusan.php?apiname=list_perguruan_tinggi_jurusan&univ_id=" + univ_id;
+    }
     $(document).ready(function(){
         $.ajax({
-            url: url_local_project_root + "/api/mahasiswa/jurusan.php?apiname=list_perguruan_tinggi_jurusan&univ_id=" + univ_id,
+            url: url,
             type: "GET",
             dataType: "json",
             success: function(result){

@@ -4,7 +4,7 @@
     </h5>
     <nav class="my-2 my-md-0 mr-md-3">
         <a class="p-2 text-dark" href="index.php?page=perguruan_tinggi">List Perguruan Tinggi</a>
-        <!-- <a class="p-2 text-dark" href="index.php?page=jurusan">List Jurusan</a> -->
+        <a class="p-2 text-dark" href="index.php?page=jurusan">List Jurusan</a>
         <a class="p-2 text-dark" href="index.php?page=history_rekomendasi">History rekomendasi</a>
         <a class="p-2 text-dark" href="index.php?page=rekomendasi_jurusan">Rekomendasi Jurusan</a>
     </nav>
