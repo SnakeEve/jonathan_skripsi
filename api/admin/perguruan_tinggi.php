@@ -90,7 +90,7 @@ if(isset($_GET['apiname'])){
             $email = $data['email'];
 
             $sqlCekPerguruanTinggi = "SELECT id FROM perguruan_tinggi
-                WHERE nama = '$nama' ";
+                WHERE nama = '$nama' and id <> $id ";
             $res = runSQLtext($sqlCekPerguruanTinggi);
 
             if($res->num_rows > 0) {
