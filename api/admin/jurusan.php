@@ -179,7 +179,7 @@ if(isset($_GET['apiname'])){
                     ];
         break;
         case 'detailMataKuliah':
-        // start web service detail
+        // start web service detailMataKuliah
         if(isset($_GET['id_jurusan'])){
             $id_jurusan = $_GET['id_jurusan'];
             $sql = "SELECT id,nama
@@ -202,7 +202,7 @@ if(isset($_GET['apiname'])){
             $responseCode = "0009";
             $message = "Missing Request for Detail";
         }
-        // end web service detail
+        // end web service detailMataKuliah
         if(strcmp($responseCode, "0000") == 0){
             $params =   [   'responseCode' => $responseCode,
                             'message' => $message,
@@ -266,6 +266,102 @@ if(isset($_GET['apiname'])){
             $message = "Missing Request for Add Mata Kuliah";
         }
         // end web service addMataKuliah
+        $params =   [   'responseCode' => $responseCode,
+                        'message' => $message,
+                        'data' =>[
+                            'body' => json_decode($body, true)
+                        ]
+                    ];
+        break;
+        case 'detailProspekJurusan':
+        // start web service detail prospek jurusan
+        if(isset($_GET['id_jurusan'])){
+            $id_jurusan = $_GET['id_jurusan'];
+            $sql = "SELECT id,nama_prospek, keterangan
+                from prospek_jurusan
+                where id_jurusan = $id_jurusan 
+                order by id" ;
+            $res = runsqltext($sql);
+            $list = array();
+            if($res->num_rows > 0){
+                while ($row = $res->fetch_object()) {
+                    array_push($list, $row);
+                }
+                $responseCode = "0000";
+                $message = "Sukses";
+            }else{
+                $responseCode = "0001";
+                $message = "Data Tidak Ditemukan";
+            }
+        } else {
+            $responseCode = "0009";
+            $message = "Missing Request for Detail Prospek Jurusan";
+        }
+        // end web service detail prospek jurusan
+        if(strcmp($responseCode, "0000") == 0){
+            $params =   [   'responseCode' => $responseCode,
+                            'message' => $message,
+                            'data' =>[
+                                'list' => $list
+                            ]
+                        ];   
+        }else{
+            $params =   [   'responseCode' => $responseCode,
+                            'message' => $message
+                        ];  
+        }
+        break;
+        case 'deleteProspekJurusan':
+        // start web service deleteProspekJurusan
+        $body = file_get_contents('php://input')."\n";
+        if($body != ''){
+            $data = json_decode($body, true);
+            $id_prospek_jurusan = $data['id_prospek_jurusan'];
+            $sql = "DELETE from prospek_jurusan WHERE id = $id_prospek_jurusan ";
+            runSQLtext($sql);
+            $responseCode = "0000";
+            $message = "Sukses";
+        }else {
+            $responseCode = "0009";
+            $message = "Missing Request for Delete Prospek Jurusan";
+        }
+        // end web service deleteProspekJurusan
+        $params =   [   'responseCode' => $responseCode,
+                        'message' => $message,
+                        'data' =>[
+                            'body' => json_decode($body, true)
+                        ]
+                    ];
+        break;
+        case 'addProspekJurusan':
+        // start web service addProspekJurusan
+        $body = file_get_contents('php://input')."\n";
+        if($body != ''){
+            $data = json_decode($body, true);
+            $id_jurusan = $data['id_jurusan'];
+            $nama_prospek = $data['nama_prospek'];
+            $keterangan = $data['keterangan'];
+
+            $sqlCekFasilitas = "SELECT id FROM prospek_jurusan
+                WHERE nama_prospek = '$nama_prospek' and id_jurusan = $id_jurusan ";
+            $res = runSQLtext($sqlCekFasilitas);
+
+            if($res->num_rows > 0) {
+                $responseCode = "0002";
+                $message = "Prospek Jurusan sudah Terdaftar";
+            } else {
+                $sql = "INSERT into prospek_jurusan (id_jurusan, nama_prospek, keterangan)
+                VALUES ($id_jurusan, '$nama_prospek', '$keterangan') ";
+                runSQLtext($sql);
+
+                $responseCode = "0000";
+                $message = "Sukses";
+            }
+        }else {
+            $responseCode = "0009";
+            $message = "Missing Request for Add Prospek Jurusan";
+        }
+        // end web service addProspekJurusan
         $params =   [   'responseCode' => $responseCode,
                         'message' => $message,
                         'data' =>[
