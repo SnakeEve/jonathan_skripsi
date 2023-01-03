@@ -35,6 +35,9 @@
                         // '                       <img data-src="'+ value.foto +'" class="img-thumbnail" src="'+ value.foto +'" style="width: 50px; height: 50px;" alt="no image" data-holder-rendered="true">' +
                         // '                   </div>' +
                         '                   <div class="col-md-9">' +
+                        '                       <p> '+value.nama_perguruan_tinggi + '</p>' +
+                        '                   </div>' +
+                        '                   <div class="col-md-9">' +
                                                 value.nama + 
                         '                   </div>' +
                         '               </div>' +

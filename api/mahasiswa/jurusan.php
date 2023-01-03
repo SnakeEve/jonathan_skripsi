@@ -42,14 +42,15 @@ if(isset($_GET['apiname'])){
             // start web service list
             if(isset($_GET['univ_id'])){
                 $univ_id = $_GET['univ_id'];
-                $sql = "SELECT j.id, j.nama, j.description, j.foto, ps.nama as nama_program_studi
+                $sql = "SELECT j.id, j.nama, j.description, j.foto, pt.nama as nama_perguruan_tinggi
                     FROM jurusan_kuliah jk
                     JOIN jurusan j ON j.id = jk.id_jurusan
                     JOIN program_studi ps ON ps.id = j.id_program_studi
+                    JOIN perguruan_tinggi pt on pt.id = jk.id_perguruan_tinggi
                     WHERE j.is_active = 'T' 
                     AND jk.id_perguruan_tinggi = $univ_id";
             } else {
-                $sql = "SELECT j.id, j.nama, j.description, j.foto, ps.nama as nama_program_studi
+                $sql = "SELECT j.id, j.nama, j.description, j.foto, '' as nama_perguruan_tinggi
                     FROM jurusan j
                     JOIN program_studi ps ON ps.id = j.id_program_studi
                     WHERE j.is_active = 'T'";
