@@ -6,12 +6,11 @@ $response = "";
 if(isset($_GET['apiname'])){
     $apiname = $_GET['apiname'];
     switch($apiname){
-        case 'get_all_list':
+        case 'list':
         // start web service list
-        $sql = "SELECT j.id, j.nama, j.description, ps.nama as nama_program_studi, j.foto
-            from jurusan j
-            join program_studi ps on ps.id = j.id_program_studi
-            order by id";
+        $sql = "SELECT id, kode, nama
+            from kecerdasan
+            order by kode";
         $res = runsqltext($sql);
         $list = array();
         if($res->num_rows > 0){
@@ -42,20 +41,20 @@ if(isset($_GET['apiname'])){
         $body = file_get_contents('php://input')."\n";
         if($body != ''){
             $data = json_decode($body, true);
-            $id_program_studi = $data['id_program_studi'];
             $nama = $data['nama'];
-            $description = $data['description'];
+            $kode = $data['kode'];
+            $keterangan = $data['keterangan'];
 
-            $sqlCekJurusan = "SELECT id FROM jurusan
-                WHERE nama = '$nama' and id_program_studi = $id_program_studi ";
-            $res = runSQLtext($sqlCekJurusan);
+            $sqlCekKecerdasan = "SELECT id FROM kecerdasan
+                WHERE kode = '$kode'";
+            $res = runSQLtext($sqlCekKecerdasan);
 
             if($res->num_rows > 0) {
                 $responseCode = "0001";
-                $message = "Program Studi sudah terdaftar";
+                $message = "Kecerdasan sudah terdaftar";
             } else {
-                $sql = "INSERT into jurusan (nama, id_program_studi, description, is_active) 
-                VALUES ('$nama', $id_program_studi, '$description' ,'T') ";
+                $sql = "INSERT into kecerdasan (nama, kode, keterangan) 
+                VALUES ('$nama', '$kode', '$keterangan') ";
                 runSQLtext($sql);
                 $responseCode = "0000";
                 $message = "Sukses";
@@ -79,19 +78,19 @@ if(isset($_GET['apiname'])){
         if($body != ''){
             $data = json_decode($body, true);
             $id = $data['id'];
-            $id_program_studi = $data['id_program_studi'];
             $nama = $data['nama'];
-            $description = $data['description'];
+            $kode = $data['kode'];
+            $keterangan = $data['keterangan'];
 
-            $sqlCekPerguruanTinggi = "SELECT id FROM jurusan
-                WHERE nama = '$nama' and id_program_studi = $id_program_studi and id <> $id ";
-            $res = runSQLtext($sqlCekPerguruanTinggi);
+            $sqlCekKecerdasan = "SELECT id FROM kecerdasan
+                WHERE kode = '$kode' and id <> $id ";
+            $res = runSQLtext($sqlCekKecerdasan);
 
             if($res->num_rows > 0) {
                 $responseCode = "0001";
-                $message = "Program studi sudah terdaftar";
+                $message = "Kecerdasan sudah terdaftar";
             } else {
-                $sql = "UPDATE jurusan SET nama='$nama', description = '$description', id_program_studi =  $id_program_studi
+                $sql = "UPDATE kecerdasan SET nama='$nama', kode = '$kode', keterangan =  '$keterangan'
                     WHERE id = $id ";
                 runSQLtext($sql);
                 $responseCode = "0000";
@@ -114,18 +113,16 @@ if(isset($_GET['apiname'])){
         // start web service detail
         if(isset($_GET['id'])){
             $id = $_GET['id'];
-            $sql = "SELECT j.id, j.nama, j.description, ps.nama as nama_program_studi, j.foto
-                from jurusan j
-                join program_studi ps on ps.id = j.id_program_studi
-                where j.id = $id " ;
+            $sql = "SELECT id, nama, kode, keterangan
+                from kecerdasan
+                where id = $id " ;
             $res = runsqltext($sql);
             if($res->num_rows > 0){
                 $row = $res->fetch_assoc();
                 $id = $row['id'];
                 $nama = $row['nama'];
-                $description = $row['description'];
-                $nama_program_studi = $row['nama_program_studi'];
-                $foto = $row['foto'];
+                $kode = $row['kode'];
+                $keterangan = $row['keterangan'];
                 
                 $responseCode = "0000";
                 $message = "Sukses";
@@ -144,9 +141,8 @@ if(isset($_GET['apiname'])){
                             'data' =>[
                                 'id' => $id,
                                 'nama' => $nama,
-                                'description' => $description,
-                                'nama_program_studi' => $nama_program_studi,
-                                'foto' => $foto,
+                                'kode' => $kode,
+                                'keterangan' => $keterangan,
                             ]
                         ];   
         }else{
@@ -162,7 +158,7 @@ if(isset($_GET['apiname'])){
             $data = json_decode($body, true);
             $id = $data['id'];
 
-            $sql = "UPDATE jurusan SET is_active = 'F' WHERE id = $id ";
+            $sql = "DELETE FROM kecerdasan WHERE id = $id ";
             runSQLtext($sql);
             $responseCode = "0000";
             $message = "Sukses";
@@ -178,14 +174,15 @@ if(isset($_GET['apiname'])){
                         ]
                     ];
         break;
-        case 'detailMataKuliah':
-        // start web service detailMataKuliah
-        if(isset($_GET['id_jurusan'])){
-            $id_jurusan = $_GET['id_jurusan'];
-            $sql = "SELECT id,nama
-                from mata_kuliah
-                where id_jurusan = $id_jurusan 
-                order by id" ;
+        case 'detailReferensiJurusan':
+        // start web service detailReferensiJurusan
+        if(isset($_GET['id_kecerdasan'])){
+            $id_kecerdasan = $_GET['id_kecerdasan'];
+            $sql = "SELECT rk.id, j.nama
+                from referensi_kecerdasan rk
+                join jurusan j on j.id = rk.id_jurusan
+                where rk.id_kecerdasan = $id_kecerdasan 
+                order by j.id" ;
             $res = runsqltext($sql);
             $list = array();
             if($res->num_rows > 0){
@@ -200,9 +197,9 @@ if(isset($_GET['apiname'])){
             }
         } else {
             $responseCode = "0009";
-            $message = "Missing Request for Detail";
+            $message = "Missing Request for Detail Referensi Jurusan";
         }
-        // end web service detailMataKuliah
+        // end web service detailReferensiJurusan
         if(strcmp($responseCode, "0000") == 0){
             $params =   [   'responseCode' => $responseCode,
                             'message' => $message,
@@ -216,13 +213,13 @@ if(isset($_GET['apiname'])){
                         ];  
         }
         break;
-        case 'deleteMataKuliah':
-        // start web service deleteMataKuliah
+        case 'deleteReferensiJurusan':
+        // start web service deleteReferensiJurusan
         $body = file_get_contents('php://input')."\n";
         if($body != ''){
             $data = json_decode($body, true);
-            $id_mata_kuliah = $data['id_mata_kuliah'];
-            $sql = "DELETE from mata_kuliah WHERE id = $id_mata_kuliah ";
+            $id_referensi_jurusan = $data['id_referensi_jurusan'];
+            $sql = "DELETE from referensi_kecerdasan WHERE id = $id_referensi_jurusan ";
             runSQLtext($sql);
             $responseCode = "0000";
             $message = "Sukses";
@@ -230,7 +227,7 @@ if(isset($_GET['apiname'])){
             $responseCode = "0009";
             $message = "Missing Request for Delete Mata Kuliah";
         }
-        // end web service deleteMataKuliah
+        // end web service deleteReferensiJurusan
         $params =   [   'responseCode' => $responseCode,
                         'message' => $message,
                         'data' =>[
@@ -238,24 +235,23 @@ if(isset($_GET['apiname'])){
                         ]
                     ];
         break;
-        case 'addMataKuliah':
-        // start web service addMataKuliah
+        case 'addReferensiJurusan':
+        // start web service addReferensiJurusan
         $body = file_get_contents('php://input')."\n";
         if($body != ''){
             $data = json_decode($body, true);
             $id_jurusan = $data['id_jurusan'];
-            $nama = $data['nama'];
+            $id_kecerdasan = $data['id_kecerdasan'];
 
-            $sqlCekFasilitas = "SELECT id FROM mata_kuliah
-                WHERE nama = '$nama' and id_jurusan = $id_jurusan ";
-            $res = runSQLtext($sqlCekFasilitas);
-
+            $sqlCekReferensiJurusan = "SELECT id FROM referensi_kecerdasan
+                WHERE id_jurusan = $id_jurusan and id_kecerdasan = $id_kecerdasan ";
+            $res = runSQLtext($sqlCekReferensiJurusan);
             if($res->num_rows > 0) {
                 $responseCode = "0002";
-                $message = "Mata Kuliah sudah Terdaftar";
+                $message = "Referensi Jurusan sudah Terdaftar";
             } else {
-                $sql = "INSERT into mata_kuliah (id_jurusan, nama)
-                VALUES ($id_jurusan, '$nama') ";
+                $sql = "INSERT into referensi_kecerdasan (id_jurusan, id_kecerdasan)
+                VALUES ($id_jurusan, $id_kecerdasan) ";
                 runSQLtext($sql);
 
                 $responseCode = "0000";
@@ -263,105 +259,9 @@ if(isset($_GET['apiname'])){
             }
         }else {
             $responseCode = "0009";
-            $message = "Missing Request for Add Mata Kuliah";
+            $message = "Missing Request for Add Referensi Jurusan";
         }
-        // end web service addMataKuliah
-        $params =   [   'responseCode' => $responseCode,
-                        'message' => $message,
-                        'data' =>[
-                            'body' => json_decode($body, true)
-                        ]
-                    ];
-        break;
-        case 'detailProspekJurusan':
-        // start web service detail prospek jurusan
-        if(isset($_GET['id_jurusan'])){
-            $id_jurusan = $_GET['id_jurusan'];
-            $sql = "SELECT id,nama_prospek, keterangan
-                from prospek_jurusan
-                where id_jurusan = $id_jurusan 
-                order by id" ;
-            $res = runsqltext($sql);
-            $list = array();
-            if($res->num_rows > 0){
-                while ($row = $res->fetch_object()) {
-                    array_push($list, $row);
-                }
-                $responseCode = "0000";
-                $message = "Sukses";
-            }else{
-                $responseCode = "0001";
-                $message = "Data Tidak Ditemukan";
-            }
-        } else {
-            $responseCode = "0009";
-            $message = "Missing Request for Detail Prospek Jurusan";
-        }
-        // end web service detail prospek jurusan
-        if(strcmp($responseCode, "0000") == 0){
-            $params =   [   'responseCode' => $responseCode,
-                            'message' => $message,
-                            'data' =>[
-                                'list' => $list
-                            ]
-                        ];   
-        }else{
-            $params =   [   'responseCode' => $responseCode,
-                            'message' => $message
-                        ];  
-        }
-        break;
-        case 'deleteProspekJurusan':
-        // start web service deleteProspekJurusan
-        $body = file_get_contents('php://input')."\n";
-        if($body != ''){
-            $data = json_decode($body, true);
-            $id_prospek_jurusan = $data['id_prospek_jurusan'];
-            $sql = "DELETE from prospek_jurusan WHERE id = $id_prospek_jurusan ";
-            runSQLtext($sql);
-            $responseCode = "0000";
-            $message = "Sukses";
-        }else {
-            $responseCode = "0009";
-            $message = "Missing Request for Delete Prospek Jurusan";
-        }
-        // end web service deleteProspekJurusan
-        $params =   [   'responseCode' => $responseCode,
-                        'message' => $message,
-                        'data' =>[
-                            'body' => json_decode($body, true)
-                        ]
-                    ];
-        break;
-        case 'addProspekJurusan':
-        // start web service addProspekJurusan
-        $body = file_get_contents('php://input')."\n";
-        if($body != ''){
-            $data = json_decode($body, true);
-            $id_jurusan = $data['id_jurusan'];
-            $nama_prospek = $data['nama_prospek'];
-            $keterangan = $data['keterangan'];
-
-            $sqlCekFasilitas = "SELECT id FROM prospek_jurusan
-                WHERE nama_prospek = '$nama_prospek' and id_jurusan = $id_jurusan ";
-            $res = runSQLtext($sqlCekFasilitas);
-
-            if($res->num_rows > 0) {
-                $responseCode = "0002";
-                $message = "Prospek Jurusan sudah Terdaftar";
-            } else {
-                $sql = "INSERT into prospek_jurusan (id_jurusan, nama_prospek, keterangan)
-                VALUES ($id_jurusan, '$nama_prospek', '$keterangan') ";
-                runSQLtext($sql);
-
-                $responseCode = "0000";
-                $message = "Sukses";
-            }
-        }else {
-            $responseCode = "0009";
-            $message = "Missing Request for Add Prospek Jurusan";
-        }
-        // end web service addProspekJurusan
+        // end web service addReferensiJurusan
         $params =   [   'responseCode' => $responseCode,
                         'message' => $message,
                         'data' =>[
