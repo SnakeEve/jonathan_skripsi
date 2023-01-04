@@ -173,6 +173,7 @@
             e.preventDefault();
 
             var formDataObject = {
+                id_perguruan_tinggi: univ_id,
                 nama: $("#data_nama").val(),
                 foto: $("#data_foto")[0].files[0],
             };
@@ -201,7 +202,7 @@
         $('#main_datatable tbody').on('click', '.btnModalDataDelete', function () {
             var data = datatable_main.row($(this).parents('tr')).data();
             var formDataObject = {
-                id: data.id_fasilitas,
+                id_fasilitas: data.id_fasilitas,
             };
 
             $.ajax({

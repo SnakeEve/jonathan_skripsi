@@ -9,26 +9,13 @@ if(isset($_GET['apiname'])){
         case 'get_all_list':
         // start web service list
         $sql = "SELECT
-                    jk.id, 
-                    jk.id_perguruan_tinggi, 
-                    pt.nama AS nama_perguruan_tinggi,
-                    ps.id AS id_program_studi,
+                    j.id, 
+                    j.id_program_studi, 
                     ps.nama AS nama_program_studi,
-                    jk.id_jurusan, 
-                    j.nama AS nama_jurusan,
-                    jk.biaya_masuk, 
-                    jk.biaya_per_semester, 
-                    jk.akreditasi, 
-                    jk.kelas, 
-                    jk.is_active
-                FROM
-                    jurusan_kuliah AS jk
-                LEFT JOIN jurusan AS J
-                ON j.id = jk.id
-                LEFT JOIN program_studi AS ps
-                ON j.id_program_studi = ps.id
-                LEFT JOIN perguruan_tinggi AS pt
-                ON pt.id = jk.id";
+                    j.nama AS nama_jurusan
+                FROM jurusan AS j
+                JOIN program_studi AS ps ON j.id_program_studi = ps.id
+                order by j.id";
         $res = runsqltext($sql);
         $list = array();
         if($res->num_rows > 0){

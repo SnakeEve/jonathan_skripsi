@@ -78,7 +78,7 @@ if(isset($_GET['apiname'])){
             $no_telp = $data['no_telp'];
             $akreditasi = $data['akreditasi'];
             $email = $data['email'];
-            $photo =  $nama.htmlspecialchars($_FILES['photo']['name']);
+            //$photo =  $nama.htmlspecialchars($_FILES['photo']['name']);
 
             $sqlCekPerguruanTinggi = "SELECT id FROM perguruan_tinggi
                 WHERE nama = '$nama' ";
@@ -90,14 +90,14 @@ if(isset($_GET['apiname'])){
             } else {
                 //photo
                 $target = '';
-                $photo_url = '/assets/logo/';
-                if (!$_FILES["photo"]["error"] > 0) {
-                    $tmp_name = $_FILES["photo"]["tmp_name"];
-                    if (@getimagesize($tmp_name) !== false) {
-                        $target = $photo;
-                        move_uploaded_file($tmp_name,$photo_url.$target);
-                    }
-                }
+                // $photo_url = '/assets/logo/';
+                // if (!$_FILES["photo"]["error"] > 0) {
+                //     $tmp_name = $_FILES["photo"]["tmp_name"];
+                //     if (@getimagesize($tmp_name) !== false) {
+                //         $target = $photo;
+                //         move_uploaded_file($tmp_name,$photo_url.$target);
+                //     }
+                // }
                 $sql = "INSERT into perguruan_tinggi (nama, description, website, no_telp, akreditasi, email, foto, is_active)
                 VALUES ('$nama', '$description', '$website', '$no_telp', '$akreditasi', '$email', '$target', 'T') ";
                 runSQLtext($sql);
@@ -236,38 +236,18 @@ if(isset($_GET['apiname'])){
         if(isset($_GET['id_perguruan_tinggi'])){
             $id_perguruan_tinggi = $_GET['id_perguruan_tinggi'];
 
-            $sqlProgramStudi = "SELECT ps.id as id_fakultas, ps.nama as nama_fakultas 
+            $sqlProgramStudi = "SELECT jk.id, ps.id as id_program_studi, ps.nama as nama_program_studi,
+                 j.id as id_jurusan, j.nama as nama_jurusan, jk.akreditasi, jk.kelas, jk.biaya_masuk, jk.biaya_per_semester
                 from jurusan_kuliah jk
                 join jurusan j on j.id = jk.id_jurusan
                 join program_studi ps on ps.id = j.id_program_studi
                 where jk.id_perguruan_tinggi = $id_perguruan_tinggi
                 and jk.is_active = 'T'
-                group by ps.id, nama_fakultas
                 order by ps.id";
             $res2 = runsqltext($sqlProgramStudi);
             $list = array();
             if($res2->num_rows > 0){
                 while ($row2 = $res2->fetch_object()) {
-                    //get jurusan
-                    $sqlJurusan = "SELECT jk.id as id_jurusan_kuliah, j.id as id_jurusan, j.nama as nama_jurusan, 
-                        jk.akreditasi, jk.kelas, jk.biaya_masuk, jk.biaya_per_semester
-                        from jurusan_kuliah jk
-                        join jurusan j on j.id = jk.id_jurusan
-                        join program_studi ps on ps.id = j.id_program_studi
-                        where jk.id_perguruan_tinggi = $id_perguruan_tinggi
-                        and jk.is_active = 'T'
-                        and ps.id = $row2->id_fakultas
-                        order by jk.id";
-                    $res_jurusan = runsqltext($sqlJurusan);
-                    $list_jurusan = array();
-                    if($res_jurusan->num_rows > 0){
-                        while ($row_jurusan = $res_jurusan->fetch_object()) {
-                            array_push($list_jurusan, $row_jurusan);
-                        }
-                    }else {
-                        $list_jurusan = null;
-                    }
-                    $row2->list_jurusan = $list_jurusan;
                     array_push($list, $row2);
                 }
                 $responseCode = "0000";
@@ -334,11 +314,13 @@ if(isset($_GET['apiname'])){
             $res = runSQLtext($sqlCekJurusanKuliah);
 
             if($res->num_rows > 0) {
-                $sql = "UPDATE jurusan_kuliah SET is_active = 'T' WHERE  id_jurusan = $id_jurusan and id_perguruan_tinggi = $id_perguruan_tinggi";
+                $sql = "UPDATE jurusan_kuliah SET biaya_masuk = $biaya_masuk, biaya_per_semester = $biaya_per_semester,
+                akreditasi = '$akreditasi', kelas = '$kelas', is_active = 'T' 
+                WHERE  id_jurusan = $id_jurusan and id_perguruan_tinggi = $id_perguruan_tinggi";
                 runSQLtext($sql);
             } else {
                 $sql = "INSERT into jurusan_kuliah (id_jurusan, id_perguruan_tinggi, biaya_masuk, biaya_per_semester, akreditasi, kelas, is_active)
-                VALUES ($id_jurusan, $id_jurusan, $biaya_masuk, $biaya_per_semester, '$akreditasi', '$kelas', 'T') ";
+                VALUES ($id_jurusan, $id_perguruan_tinggi, $biaya_masuk, $biaya_per_semester, '$akreditasi', '$kelas', 'T') ";
                 runSQLtext($sql);
             }
             $responseCode = "0000";

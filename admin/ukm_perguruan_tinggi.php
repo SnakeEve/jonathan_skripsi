@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <h1>Fasilitas</h1>
+                    <h1>UKM</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -111,7 +111,7 @@
             autoWidth: false,
             responsive: true,
             ajax: {
-                "url": "../api/admin/perguruan_tinggi.php?apiname=detailFasilitas&id_perguruan_tinggi="+univ_id,
+                "url": "../api/admin/perguruan_tinggi.php?apiname=detailUkm&id_perguruan_tinggi="+univ_id,
                 "type": "GET",
                 "headers": {
                     'Content-Type': 'application/json'
@@ -125,7 +125,7 @@
             },
             columns: [
                 {
-                    "data": "id_fasilitas",
+                    "data": "id_ukm",
                     "width": "90px",
                     "orderable": false,
                     "render": function (data, type, row) {
@@ -136,7 +136,7 @@
                         return button_string;
                     }
                 },
-                {"data": "id_fasilitas"},
+                {"data": "id_ukm"},
                 {"data": "nama"},
                 {
                     "data": "foto",
@@ -173,6 +173,7 @@
             e.preventDefault();
 
             var formDataObject = {
+                id_perguruan_tinggi: univ_id,
                 nama: $("#data_nama").val(),
                 foto: $("#data_foto")[0].files[0],
             };
@@ -201,7 +202,7 @@
         $('#main_datatable tbody').on('click', '.btnModalDataDelete', function () {
             var data = datatable_main.row($(this).parents('tr')).data();
             var formDataObject = {
-                id: data.id_ukm,
+                id_ukm: data.id_ukm,
             };
 
             $.ajax({

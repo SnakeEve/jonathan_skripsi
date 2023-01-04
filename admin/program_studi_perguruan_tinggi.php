@@ -35,7 +35,7 @@
                                         <th>Kelas</th>
                                         <th>Biaya Persemester (Rp)</th>
                                         <th>Biaya Masuk (Rp)</th>
-                                        <th>Status</th>
+                                        <!--<th>Status</th>-->
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -183,7 +183,7 @@
         var program_studi_id = $('#data_program_studi').val();
         $('#data_jurusan').empty();
         $.ajax({
-            url: '../api/admin/jurusan.php?apiname=get_all_list_by_university&id_perguruan_tinggi='+program_studi_id,
+            url: '../api/admin/jurusan.php?apiname=get_all_list_by_program_studi&program_studi_id='+program_studi_id,
             type: 'GET',
             contentType: "application/json",
             dataType: "json",
@@ -197,7 +197,7 @@
                             html += '<option value="' + data[i].id + '" selected>' + data[i].nama_jurusan + '</option>';
                         }
                         else{
-                            html += '<option value="' + data[i].id + '">' + data[i].nama + '</option>';
+                            html += '<option value="' + data[i].id + '">' + data[i].nama_jurusan + '</option>';
                         }
                     }
                     $('#data_jurusan').empty().html(html);
@@ -223,7 +223,7 @@
             autoWidth: false,
             responsive: true,
             ajax: {
-                "url": "../api/admin/jurusan.php?apiname=get_all_list&id_perguruan_tinggi="+univ_id,
+                "url": "../api/admin/perguruan_tinggi.php?apiname=detailProgramStudi&id_perguruan_tinggi="+univ_id,
                 "type": "GET",
                 "headers": {
                     'Content-Type': 'application/json'
@@ -243,7 +243,7 @@
                     "render": function (data, type, row) {
                         var button_string = "";
                         button_string += '<div class="btn-group flex-wrap">';
-                        button_string += '<button type="button" class="btn btn-info btn-sm btnModalDataUpdate" ><i class="fas fa-edit"></i></button> ';
+                        //button_string += '<button type="button" class="btn btn-info btn-sm btnModalDataUpdate" ><i class="fas fa-edit"></i></button> ';
                         button_string += '<button type="button" class="btn btn-danger btn-sm btnModalDataDelete" ><i class="fa fa-trash" aria-hidden="true"></i></button> ';
                         button_string += '</div>';
                         return button_string;
@@ -257,16 +257,16 @@
                 {"data": "akreditasi"},
                 {"data": "kelas"},
                 {"data": "biaya_masuk"},
-                {"data": "biaya_per_semester"},
-                {
-                    "data": "is_active",
-                    "render": function (data, type, row) {
-                        if(data == 'T')
-                            return '<span class="badge badge-success">Active</span>';
-                        else
-                            return '<span class="badge badge-danger">Inactive</span>';
-                    }
-                }
+                {"data": "biaya_per_semester"}//,
+                // {
+                //     "data": "is_active",
+                //     "render": function (data, type, row) {
+                //         if(data == 'T')
+                //             return '<span class="badge badge-success">Active</span>';
+                //         else
+                //             return '<span class="badge badge-danger">Inactive</span>';
+                //     }
+                // }
             ],
             columnDefs: [
                 {
@@ -303,11 +303,11 @@
                 var row = datatable_main.row(tr);
 
                 var formDataObject = {
-                    "id": row.data().id
+                    "id_jurusan_kuliah": row.data().id
                 };
 
                 $.ajax({
-                    url: '../api/admin/perguruan_tinggi.php?apiname=delete',
+                    url: '../api/admin/perguruan_tinggi.php?apiname=deleteProgramStudi',
                     type: 'POST',
                     data: JSON.stringify(formDataObject),
                     contentType: "application/json",
@@ -344,69 +344,35 @@
             $('#ModalData').modal('show');
         });
 
-        $('#formDataUpdate').on('submit', function (e) {
+        $('#formData').on('submit', function (e) {
             e.preventDefault();
+            var formDataObject = {
+                id_jurusan: $("#data_jurusan").val(),
+                id_perguruan_tinggi: univ_id,
+                biaya_masuk: $("#data_biaya_masuk").val(),
+                biaya_per_semester: $("#data_biaya_per_semester").val(),
+                akreditasi: $("#data_akreditasi").val(),
+                kelas: $("#data_kelas").val()
+            };
 
-            if(submit_type == 'update'){
-                var formDataObject = {
-                    id: $("#data_id").val(),
-                    id_program_studi: $("#data_program_studi").val(),
-                    id_jurusan: $("#data_jurusan").val(),
-                    biaya_masuk: $("#data_biaya_masuk").val(),
-                    biaya_per_semester: $("#data_biaya_per_semester").val(),
-                    akreditasi: $("#data_akreditasi").val(),
-                    kelas: $("#data_kelas").val()
-                };
-
-                $.ajax({
-                    url: '../api/admin/perguruan_tinggi.php?apiname=update',
-                    type: 'POST',
-                    data: JSON.stringify(formDataObject),
-                    contentType: "application/json",
-                    dataType: "json",
-                    success: function (output) {
-                        if (output.responseCode === '0000') {
-                            $('#ModalData').modal('hide');
-                            datatable_main.ajax.reload();
-                        } else {
-                            alert(output.message);
-                        }
-                    },
-                    error: function (output) {
+            $.ajax({
+                url: '../api/admin/perguruan_tinggi.php?apiname=addProgramStudi',
+                type: 'POST',
+                data: JSON.stringify(formDataObject),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (output) {
+                    if (output.responseCode === '0000') {
+                        $('#ModalData').modal('hide');
+                        datatable_main.ajax.reload();
+                    } else {
                         alert(output.message);
                     }
-                });
-            }
-            else{
-                var formDataObject = {
-                    id_program_studi: $("#data_program_studi").val(),
-                    id_jurusan: $("#data_jurusan").val(),
-                    biaya_masuk: $("#data_biaya_masuk").val(),
-                    biaya_per_semester: $("#data_biaya_per_semester").val(),
-                    akreditasi: $("#data_akreditasi").val(),
-                    kelas: $("#data_kelas").val()
-                };
-
-                $.ajax({
-                    url: '../api/admin/perguruan_tinggi.php?apiname=insert',
-                    type: 'POST',
-                    data: JSON.stringify(formDataObject),
-                    contentType: "application/json",
-                    dataType: "json",
-                    success: function (output) {
-                        if (output.responseCode === '0000') {
-                            $('#ModalData').modal('hide');
-                            datatable_main.ajax.reload();
-                        } else {
-                            alert(output.message);
-                        }
-                    },
-                    error: function (output) {
-                        alert(output.message);
-                    }
-                });
-            }
-
+                },
+                error: function (output) {
+                    alert(output.message);
+                }
+            });
         });
 
     });
