@@ -152,7 +152,7 @@
         $('#data_program_studi').empty();
         $('#data_jurusan').empty();
         $.ajax({
-            url: '../api/admin/program_studi.php?apiname=get_all_list',
+            url: '../api/admin/program_studi.php?apiname=list',
             type: 'GET',
             contentType: "application/json",
             dataType: "json",

@@ -54,7 +54,8 @@ if(isset($_GET['apiname'])){
                     FROM jurusan AS j
                     LEFT JOIN program_studi AS ps 
                     ON j.id_program_studi = ps.id 
-                    WHERE ps.id = $programStudiID";
+                    WHERE ps.id = $programStudiID
+                    and j.is_active = 'T' ";
             $res = runsqltext($sql);
             $list = array();
             if($res->num_rows > 0){
@@ -105,57 +106,6 @@ if(isset($_GET['apiname'])){
                 LEFT JOIN perguruan_tinggi AS pt
                 ON pt.id = jk.id
                 WHERE jk.id_perguruan_tinggi = $perguruanTinggi";
-            $res = runsqltext($sql);
-            $list = array();
-            if($res->num_rows > 0){
-                while ($row = $res->fetch_object()) {
-                    array_push($list, $row);
-                }
-            }else{
-                $list = null;
-            }
-            $responseCode = "0000";
-            $message = "Sukses";
-            // end web service list
-            if(strcmp($responseCode, "0000") == 0){
-                $params =   [   'responseCode' => $responseCode,
-                                'message' => $message,
-                                'data' =>[
-                                    'list' => $list
-                                ]
-                            ];   
-            }else{
-                $params =   [   'responseCode' => $responseCode,
-                                'message' => $message
-                            ];  
-            }
-            break;
-        case 'get_all_list_by_program_studi':
-            $programStudiID = $_GET['program_studi_id'];
-            // start web service list
-            $sql = "SELECT 
-                    jk.id, 
-                    jk.id_perguruan_tinggi, 
-                    pt.nama AS nama_perguruan_tinggi, 
-                    ps.id AS id_program_studi, 
-                    ps.nama AS nama_program_studi, 
-                    jk.id_jurusan, 
-                    j.nama AS nama_jurusan, 
-                    j.description AS description_jurusan, 
-                    j.foto AS foto_jurusan, 
-                    jk.biaya_masuk, 
-                    jk.biaya_per_semester, 
-                    jk.akreditasi, 
-                    jk.kelas, 
-                    jk.is_active 
-                FROM jurusan_kuliah AS jk 
-                LEFT JOIN jurusan AS J 
-                ON j.id = jk.id 
-                LEFT JOIN program_studi AS ps 
-                ON j.id_program_studi = ps.id 
-                LEFT JOIN perguruan_tinggi AS pt 
-                ON pt.id = jk.id 
-                WHERE ps.id = $programStudiID";
             $res = runsqltext($sql);
             $list = array();
             if($res->num_rows > 0){
