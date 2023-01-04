@@ -4,6 +4,9 @@
         echo "<script> location.href='login.php'; </script>";
         exit;
     }
+
+    $id = $_SESSION['user']["data"]["id"];
+    $nama = $_SESSION['user']["data"]["nama"];
 ?>
 <head>
     <title>Skripsi</title>

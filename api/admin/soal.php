@@ -36,6 +36,36 @@ if(isset($_GET['apiname'])){
                         ];  
         }
         break;
+        case 'list_frontend':
+            // start web service list
+            $sql = "SELECT id, nama, RAND() as rand
+                from soal
+                order by rand";
+            $res = runsqltext($sql);
+            $list = array();
+            if($res->num_rows > 0){
+                while ($row = $res->fetch_object()) {
+                    array_push($list, $row);
+                }
+            }else{
+                $list = null;
+            }
+            $responseCode = "0000";
+            $message = "Sukses";
+            // end web service list
+            if(strcmp($responseCode, "0000") == 0){
+                $params =   [   'responseCode' => $responseCode,
+                                'message' => $message,
+                                'data' =>[
+                                    'list' => $list
+                                ]
+                            ];   
+            }else{
+                $params =   [   'responseCode' => $responseCode,
+                                'message' => $message
+                            ];  
+            }
+            break;
         case 'list_by_kecerdasan':
             $id_kecerdasan = $_GET['id_kecerdasan'];
             // start web service list

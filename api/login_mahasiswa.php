@@ -53,7 +53,6 @@ if(strcmp($responseCode, "0000") == 0){
                 ];   
 
     $_SESSION['user'] = $params;
-    var_dump($params);
 
     header('Location: ../index.php');
 

@@ -8,6 +8,6 @@
         <a class="p-2 text-dark" href="index.php?page=history_rekomendasi">History rekomendasi</a>
         <a class="p-2 text-dark" href="index.php?page=rekomendasi_jurusan">Rekomendasi Jurusan</a>
     </nav>
-    <button class="btn btn-outline-primary mr-1" id="user_status">USER</button>
+    <button class="btn btn-outline-primary mr-1" id="user_status"><?php echo $nama; ?></button>
     <button class="btn btn-outline-primary" id="logout" onclick="javascript_logout()">LOGOUT</button>
 </div>
