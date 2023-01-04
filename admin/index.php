@@ -40,6 +40,12 @@
                 case "kriteria":
                     include 'kriteria.php';
                     break;
+                case "kriteria_jurusan":
+                    include 'kriteria_jurusan.php';
+                    break;
+                case "kriteria_soal":
+                    include 'kriteria_soal.php';
+                    break;
                 //SAMPLE
                 case "datatable":
                 default:

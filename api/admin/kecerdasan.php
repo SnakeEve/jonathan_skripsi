@@ -8,7 +8,7 @@ if(isset($_GET['apiname'])){
     switch($apiname){
         case 'list':
         // start web service list
-        $sql = "SELECT id, kode, nama
+        $sql = "SELECT id, kode, nama, keterangan
             from kecerdasan
             order by kode";
         $res = runsqltext($sql);
