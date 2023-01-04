@@ -68,7 +68,7 @@ if(isset($_GET['apiname'])){
                         move_uploaded_file($tmp_name,$photo_url.$target);
                     }
                 }
-                $sql = "INSERT into perguruan_tinggi (nama, description, website, no_telp, akreditasi, email, photo, is_active)
+                $sql = "INSERT into perguruan_tinggi (nama, description, website, no_telp, akreditasi, email, foto, is_active)
                 VALUES ('$nama', '$description', '$website', '$no_telp', '$akreditasi', '$email', '$target', 'T') ";
                 runSQLtext($sql);
                 $responseCode = "0000";
