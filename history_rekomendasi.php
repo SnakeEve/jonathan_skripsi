@@ -25,36 +25,42 @@
     <div class="container pt-4">
         <div class="row">
             <div class="col-md-12 text-center">
-                <a class="btn btn-md btn-primary" href="index.php?page=rekomendasi_jurusan">Lakukan tes ulang</a>
-                <br>
-                <br>
-                <h6 class="text-center">Daftar jurusan kuliah di bawah ini telah diurutkan berdasarkan jawaban kamu pada kuis minat bakat</h6>
+                <h3 class="text-center">REKOMENDASI</h3>
+                <p class="text-center">Berikut adalah hasil tes anda</p>
+                <div id="data_container_location"></div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="callout">
-                    <h4>Teknik Fisika</h4>
-                    4 Kampus<br>
-                    Rp 500.000 - Rp 25.000.000/Semester
-                </div>
-                <div class="callout">
-                    <h4>Teknik Nuklir</h4>
-                    1 Kampus<br>
-                    Rp 500.000 - Rp 13.000.000/Semester
-                </div>
-                <div class="callout">
-                    <h4>Ilmu Komputer</h4>
-                    11 Kampus<br>
-                    Rp 500.000 - Rp 11.000.000/Semester
-                </div>
-                <div class="callout">
-                    <h4>Sistem Informasi</h4>
-                    14 Kampus<br>
-                    Rp 500.000 - Rp 25.000.000/Semester
-                </div>
-            </div>
-        </div>
     </div>
 </main>
+
+
+<script>
+    var user_id = <?php echo $id; ?>;
+    $(document).ready(function(){
+        $.ajax({
+            url: url_local_project_root + "/api/mahasiswa/tes_kecerdasan.php?apiname=historyRekomendasi&id_user="+user_id,
+            type: "GET",
+            dataType: "json",
+            success: function(result){
+                let html_output_string = "";
+
+                let data_history = result.data.list[0];
+
+                html_output_string += '' +
+                    '<div class="callout callout-info">' +
+                    '   <p>Hasil kategori kecerdasan anda adalah: '+data_history.nama+'</p>' +
+                    '   <p>Keterangan tambahan: '+data_history.keterangan+'</p>' +
+                    '   <p>Total poin kecerdasan anda: '+data_history.total_point+'</p>' +
+                    '</div>';
+                
+                html_output_string = html_output_string.trim();
+
+                $("#data_container_location").empty().append(html_output_string);
+            },
+            error: function(data){
+                console.log(data);
+            }
+        });
+    });
+</script>
