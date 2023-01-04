@@ -92,9 +92,32 @@ if(isset($_GET['apiname'])){
                         ]
                     ];
         break;
+        case 'delete':
+            // start web service delete
+            $body = file_get_contents('php://input')."\n";
+            if($body != ''){
+                $data = json_decode($body, true);
+                $id = $data['id'];
+    
+                $sql = "UPDATE users SET is_active = 'F' WHERE id = $id ";
+                runSQLtext($sql);
+                $responseCode = "0000";
+                $message = "Sukses";
+            }else {
+                $responseCode = "0009";
+                $message = "Missing Request for Delete";
+            }
+            // end web service delete
+            $params =   [   'responseCode' => $responseCode,
+                            'message' => $message,
+                            'data' =>[
+                                'body' => json_decode($body, true)
+                            ]
+                        ];
+            break;
         case 'list':
         // start web service list
-        $sql = "SELECT id, nama, no_hp, agama, tanggal_lahir, tempat_lahir, user_type, jenis_kelamin
+        $sql = "SELECT id, nama, no_hp, agama, tanggal_lahir, tempat_lahir, user_type, jenis_kelamin, email, is_active
             from users
             order by id" ;
         $res = runsqltext($sql);

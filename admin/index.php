@@ -9,7 +9,7 @@
         <?php //include 'user_modal.php';?>
         
         <?php 
-            $page = isset($_GET['page']) ? $_GET['page'] : 'datatable';
+            $page = isset($_GET['page']) ? $_GET['page'] : 'universitas';
 
             switch ($page) {
                 //PERGURUAN TINGGI
