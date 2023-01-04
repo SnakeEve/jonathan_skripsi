@@ -1,6 +1,6 @@
 <?php
 include "../config/database.php";
-session_destroy();
+unset($_SESSION["user"]);
 session_start();
 
 if(isset($_POST['email']) && isset($_POST['password'])){
