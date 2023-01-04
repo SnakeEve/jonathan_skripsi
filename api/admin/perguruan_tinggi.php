@@ -6,6 +6,36 @@ $response = "";
 if(isset($_GET['apiname'])){
     $apiname = $_GET['apiname'];
     switch($apiname){
+        case 'list_all':
+            // start web service list
+            $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email, is_active
+                from perguruan_tinggi 
+                order by id";
+            $res = runsqltext($sql);
+            $list = array();
+            if($res->num_rows > 0){
+                while ($row = $res->fetch_object()) {
+                    array_push($list, $row);
+                }
+            }else{
+                $list = null;
+            }
+            $responseCode = "0000";
+            $message = "Sukses";
+            // end web service list
+            if(strcmp($responseCode, "0000") == 0){
+                $params =   [   'responseCode' => $responseCode,
+                                'message' => $message,
+                                'data' =>[
+                                    'list' => $list
+                                ]
+                            ];   
+            }else{
+                $params =   [   'responseCode' => $responseCode,
+                                'message' => $message
+                            ];  
+            }
+            break;
         case 'list':
         // start web service list
         $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email

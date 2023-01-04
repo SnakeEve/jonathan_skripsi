@@ -8,7 +8,7 @@ if(isset($_GET['apiname'])){
     switch($apiname){
         case 'list':
         // start web service list
-        $sql = "SELECT id, nama
+        $sql = "SELECT id, nama, is_active
             from program_studi
             where is_active = 'T' 
             order by id";
@@ -39,7 +39,7 @@ if(isset($_GET['apiname'])){
         break;
         case 'get_all_list':
         // start web service list
-        $sql = "SELECT id, nama
+        $sql = "SELECT id, nama, is_active
             from program_studi
             order by id";
         $res = runsqltext($sql);
