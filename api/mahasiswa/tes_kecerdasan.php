@@ -57,25 +57,92 @@ if(isset($_GET['apiname'])){
             }
 
             foreach($tes_kecerdasan as $soal){
-                if (strcmp($soal['answer'], "T") == 0) {
-                    echo $soal['id_soal']."\n";
-                    //insert tes
-                    $sql = "INSERT into detail_tes_kecerdasan (id_user, id_tes_kecerdasan, created_date, updated_date)
-                        VALUES ($id_user, now(), now()) ";
-                    runSQLtext($sql);
+                if (strcmp($soal['jawaban'], "T") == 0) {
+                    $id_soal = $soal["id_soal"];
+                    //insert tes detail
+                    $sqlDetail = "INSERT into detail_tes_kecerdasan (id_tes_kecerdasan, id_soal)
+                        VALUES ($id_tes, $id_soal) ";
+                    runSQLtext($sqlDetail);
                 }
             }
-            //$list_jawaban = $data['list_jawaban'];
+
+            //hitung hasil
+            $sqlCekData = "SELECT id_kecerdasan, COUNT(1) AS total_score
+                FROM soal s
+                JOIN detail_tes_kecerdasan dt ON dt.id_soal = s.id
+                WHERE dt.id_tes_kecerdasan = $id_tes
+                GROUP BY id_kecerdasan
+                order by total_score desc";
+            $res_cek = runsqltext($sqlCekData);
+            if($res_cek->num_rows > 0){
+                $max_score = 0;
+                $list_kecerdasan = array();
+                while ($row_cek = $res_cek->fetch_object()) {
+                    if ($max_score > $row_cek->total_score){
+                        break;
+                    } else {
+                        $max_score = $row_cek->total_score;
+                        array_push($list_kecerdasan, $row_cek);
+                    }
+                }
+            }
+
+            foreach($list_kecerdasan as $kecerdasan){
+                //insert hasil tes
+                $sqlHasil = "INSERT into hasil_tes_kecerdasan (id_tes_kecerdasan, id_kecerdasan, total_point)
+                    VALUES ($id_tes, $kecerdasan->id_kecerdasan, $kecerdasan->total_score) ";
+                runSQLtext($sqlHasil);
+            }
             $responseCode = "0000";
             $message = "Sukses";
         }else {
             $responseCode = "0009";
-            $message = "Missing Request for Insert";
+            $message = "Missing Request for Save";
         }
-        // end web service insert
+        // end web service save
         if(strcmp($responseCode, "0000") == 0){
             $params =   [   'responseCode' => $responseCode,
                             'message' => $message
+                        ];   
+        }else{
+            $params =   [   'responseCode' => $responseCode,
+                            'message' => $message
+                        ];  
+        }
+        break;
+        case 'historyRekomendasi':
+        // start web service historyRekomendasi
+        if(isset($_GET['id_user'])){
+            $id_user = $_GET['id_user'];
+
+            $sqlHistoryRekomendasi = "SELECT k.id, k.nama, k.keterangan, ht.total_point
+                FROM  tes_kecerdasan t
+                JOIN  hasil_tes_kecerdasan ht ON ht.id_tes_kecerdasan = t.id
+                JOIN  kecerdasan k ON k.id = ht.id_kecerdasan
+                WHERE 1=1
+                AND t.id = (SELECT id FROM tes_kecerdasan WHERE id_user  = $id_user ORDER BY created_date DESC LIMIT 1)";
+            $res = runsqltext($sqlHistoryRekomendasi);
+            $list = array();
+            if($res->num_rows > 0){
+                while ($row = $res->fetch_object()) {
+                    array_push($list, $row);
+                }
+            }else{
+                $list = null;
+            }
+            $responseCode = "0000";
+            $message = "Sukses";
+        } else {
+            $responseCode = "0009";
+            $message = "Missing Request for History Rekomendasi";
+        }
+        // end web service historyRekomendasi
+        if(strcmp($responseCode, "0000") == 0){
+            $params =   [   'responseCode' => $responseCode,
+                            'message' => $message,
+                            'data' =>[
+                                'list' => $list
+                            ]
                         ];   
         }else{
             $params =   [   'responseCode' => $responseCode,
