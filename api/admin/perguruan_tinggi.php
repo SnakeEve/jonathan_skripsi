@@ -250,12 +250,11 @@ if(isset($_GET['apiname'])){
                 while ($row2 = $res2->fetch_object()) {
                     array_push($list, $row2);
                 }
-                $responseCode = "0000";
-                $message = "Sukses";
             }else{
-                $responseCode = "0001";
-                $message = "Data tidak ditemukan";
+                $list = null;
             }
+            $responseCode = "0000";
+            $message = "Sukses";
         } else {
             $responseCode = "0009";
             $message = "Missing Request for Detail Program Studi";
@@ -354,12 +353,11 @@ if(isset($_GET['apiname'])){
                 while ($row = $res->fetch_object()) {
                     array_push($list, $row);
                 }
-                $responseCode = "0000";
-                $message = "Sukses";
             }else{
-                $responseCode = "0001";
-                $message = "Data Tidak Ditemukan";
+                $list = null;
             }
+            $responseCode = "0000";
+            $message = "Sukses";
         } else {
             $responseCode = "0009";
             $message = "Missing Request for Detail Fasilitas";
@@ -451,12 +449,11 @@ if(isset($_GET['apiname'])){
                 while ($row = $res->fetch_object()) {
                     array_push($list, $row);
                 }
-                $responseCode = "0000";
-                $message = "Sukses";
             }else{
-                $responseCode = "0001";
-                $message = "Data Tidak Ditemukan";
+                $list = null;
             }
+            $responseCode = "0000";
+            $message = "Sukses";
         } else {
             $responseCode = "0009";
             $message = "Missing Request for Detail UKM";
