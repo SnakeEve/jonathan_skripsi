@@ -15,15 +15,11 @@
                     </div>
                     <div class="form-group">
                         <label for="password_1">Password</label>
-                        <input type="password" class="form-control" id="password_1" placeholder="Password">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Konfirmasi Password</label>
                         <input type="password" class="form-control" id="password" placeholder="Password">
                     </div>
                     <div class="form-group">
-                        <label for="nama_depan">Nama Depan</label>
-                        <input type="text" class="form-control" id="nama_depan" placeholder="">
+                        <label for="nama_depan">Nama</label>
+                        <input type="text" class="form-control" id="nama" placeholder="">
                     </div>
                     <div class="form-group">
                         <label for="nomor_telepon">Nomor Telepon</label>
@@ -34,19 +30,15 @@
                         <input type="text" class="form-control" id="asal_jurusan" placeholder="">
                     </div>
                     <div class="form-group">
-                        <label for="jenis_kelamin">Jenis Kelamin</label>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="jenis_kelamin" id="jenis_kelamin_pria" value="pria">
-                            <label class="form-check-label" for="jenis_kelamin_pria">Pria</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="jenis_kelamin" id="jenis_kelamin_wanita" value="wanita">
-                            <label class="form-check-label" for="jenis_kelamin_wanita">Wanita</label>
-                        </div>
+                        <label>Jenis Kelamin</label>
+                        <select id="jenis_kelamin" class="form-control" required>
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="tanggal_lahir">Tanggal Lahir</label>
-                        <input type="calendar" class="form-control" id="tanggal_lahir" placeholder="">
+                        <input type="date" class="form-control" id="tanggal_lahir" placeholder="">
                     </div>
                     <div class="form-group">
                         <label for="tempat_lahir">Tempat Lahir</label>
@@ -66,7 +58,7 @@
                         </select>
                     </div>
                     <div class="float-right">
-                        <button type="button" class="btn btn-primary">Simpan</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                         <button type="button" class="btn btn-secondary" onclick="closeUserModal()">Close</button>
                     </div>
                 </form>
@@ -76,3 +68,43 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#biodata_form').on('submit', function (e) {
+            e.preventDefault();
+
+            var formDataObject = {
+                nama: $("#nama").val(),
+                no_hp: $("#nomor_telepon").val(),
+                agama: $("#agama").val(),
+                tanggal_lahir: $("#tanggal_lahir").val(),
+                tempat_lahir: $("#tempat_lahir").val(),
+                // user_type: $("#data_user_type").val(),
+                email: $("#email").val(),
+                jenis_kelamin: $("#jenis_kelamin").val(),
+                password: $("#password").val()
+            };
+
+            $.ajax({
+                url: 'api/user.php?apiname=register',
+                type: 'POST',
+                data: JSON.stringify(formDataObject),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (output) {
+                    if (output.responseCode === '0000') {
+                        location.reload();
+                    } else {
+                        alert(output.message);
+                    }
+                },
+                error: function (output) {
+                    alert(output.message);
+                }
+            });
+        });
+    });
+
+    
+</script>

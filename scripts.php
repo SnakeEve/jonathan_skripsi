@@ -29,5 +29,10 @@
         return input;
     }
 
+    function javascript_logout() {
+        if (confirm("Are you sure?")) {
+            window.location.replace("logout.php");
+        }
+    }
 
 </script>

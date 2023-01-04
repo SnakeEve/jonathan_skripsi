@@ -7,12 +7,12 @@
     <div class="sidebar">
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="index.php?page=datatable" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>Datatable</p>
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a href="index.php?page=universitas" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
@@ -34,7 +34,7 @@
                 <li class="nav-item">
                     <a href="index.php?page=kriteria" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
-                        <p>Kriteria</p>
+                        <p>Kecerdasan</p>
                     </a>
                 </li>
             </ul>

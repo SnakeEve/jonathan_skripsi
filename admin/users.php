@@ -225,8 +225,8 @@
                     "render": function (data, type, row) {
                         if(data == 'A')
                             return 'Admin';
-                        else if(data == 'M')
-                            return 'Mahasiswa';
+                        else if(data == 'U')
+                            return 'User';
                         else 
                             return "";
                     }
