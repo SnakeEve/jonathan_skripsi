@@ -48,6 +48,7 @@ if(isset($_GET['apiname'])){
             $no_telp = $data['no_telp'];
             $akreditasi = $data['akreditasi'];
             $email = $data['email'];
+            $photo =  $nama.htmlspecialchars($_FILES['photo']['name']);
 
             $sqlCekPerguruanTinggi = "SELECT id FROM perguruan_tinggi
                 WHERE nama = '$nama' ";
@@ -57,8 +58,18 @@ if(isset($_GET['apiname'])){
                 $responseCode = "0001";
                 $message = "Perguruan tinggi sudah terdaftar";
             } else {
-                $sql = "INSERT into perguruan_tinggi (nama, description, website, no_telp, akreditasi, email, is_active)
-                VALUES ('$nama', '$description', '$website', '$no_telp', '$akreditasi', '$email', 'T') ";
+                //photo
+                $target = '';
+                $photo_url = '/assets/logo/';
+                if (!$_FILES["photo"]["error"] > 0) {
+                    $tmp_name = $_FILES["photo"]["tmp_name"];
+                    if (@getimagesize($tmp_name) !== false) {
+                        $target = $photo;
+                        move_uploaded_file($tmp_name,$photo_url.$target);
+                    }
+                }
+                $sql = "INSERT into perguruan_tinggi (nama, description, website, no_telp, akreditasi, email, photo, is_active)
+                VALUES ('$nama', '$description', '$website', '$no_telp', '$akreditasi', '$email', '$target', 'T') ";
                 runSQLtext($sql);
                 $responseCode = "0000";
                 $message = "Sukses";
