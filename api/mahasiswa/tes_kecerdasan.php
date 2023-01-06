@@ -75,24 +75,15 @@ if(isset($_GET['apiname'])){
                 order by total_score desc";
             $res_cek = runsqltext($sqlCekData);
             if($res_cek->num_rows > 0){
-                $max_score = 0;
                 $list_kecerdasan = array();
                 while ($row_cek = $res_cek->fetch_object()) {
-                    if ($max_score > $row_cek->total_score){
-                        break;
-                    } else {
-                        $max_score = $row_cek->total_score;
-                        array_push($list_kecerdasan, $row_cek);
-                    }
+                    //insert hasil tes
+                        $sqlHasil = "INSERT into hasil_tes_kecerdasan (id_tes_kecerdasan, id_kecerdasan, total_point)
+                        VALUES ($id_tes, $row_cek->id_kecerdasan, $row_cek->total_score) ";
+                        runSQLtext($sqlHasil);
                 }
             }
 
-            foreach($list_kecerdasan as $kecerdasan){
-                //insert hasil tes
-                $sqlHasil = "INSERT into hasil_tes_kecerdasan (id_tes_kecerdasan, id_kecerdasan, total_point)
-                    VALUES ($id_tes, $kecerdasan->id_kecerdasan, $kecerdasan->total_score) ";
-                runSQLtext($sqlHasil);
-            }
             $responseCode = "0000";
             $message = "Sukses";
         }else {
@@ -120,7 +111,8 @@ if(isset($_GET['apiname'])){
                 JOIN  hasil_tes_kecerdasan ht ON ht.id_tes_kecerdasan = t.id
                 JOIN  kecerdasan k ON k.id = ht.id_kecerdasan
                 WHERE 1=1
-                AND t.id = (SELECT id FROM tes_kecerdasan WHERE id_user  = $id_user ORDER BY created_date DESC LIMIT 1)";
+                AND t.id = (SELECT id FROM tes_kecerdasan WHERE id_user  = $id_user ORDER BY created_date DESC LIMIT 1) 
+                ORDER BY ht.total_point desc";
             $res = runsqltext($sqlHistoryRekomendasi);
             $list = array();
             if($res->num_rows > 0){
@@ -150,7 +142,47 @@ if(isset($_GET['apiname'])){
                         ];  
         }
         break;
-        
+        case 'listJurusanByKecerdasan':
+            // start web service listJurusanByKecerdasan
+            if(isset($_GET['id_kecerdasan'])){
+                $id_kecerdasan = $_GET['id_kecerdasan'];
+    
+                $sql = "SELECT j.id, j.nama, j.description, ps.nama as nama_program_studi, j.foto
+                    FROM kecerdasan k
+                    JOIN referensi_kecerdasan rk on rk.id_kecerdasan = k.id
+                    JOIN jurusan j on j.id = rk.id_jurusan
+                    JOIN program_studi ps on ps.id = j.id_program_studi
+                    WHERE 1=1
+                    ORDER BY j.id asc";
+                $res = runsqltext($sql);
+                $list = array();
+                if($res->num_rows > 0){
+                    while ($row = $res->fetch_object()) {
+                        array_push($list, $row);
+                    }
+                }else{
+                    $list = null;
+                }
+                $responseCode = "0000";
+                $message = "Sukses";
+            } else {
+                $responseCode = "0009";
+                $message = "Missing Request for List Jurusan by Kecerdasan";
+            }
+            // end web service listJurusanByKecerdasan
+            if(strcmp($responseCode, "0000") == 0){
+                $params =   [   'responseCode' => $responseCode,
+                                'message' => $message,
+                                'data' =>[
+                                    'list' => $list
+                                ]
+                            ];   
+            }else{
+                $params =   [   'responseCode' => $responseCode,
+                                'message' => $message
+                            ];  
+            }
+            break;
         default:
         $responseCode = "0010";
         $message = "Unknown Api Name";

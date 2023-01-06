@@ -160,6 +160,10 @@ if(isset($_GET['apiname'])){
 
             $sql = "DELETE FROM kecerdasan WHERE id = $id ";
             runSQLtext($sql);
+
+            $sqlDeleteSoal = "DELETE FROM soal where id_kecerdasan = $id ";
+            runSQLtext($sqlDeleteSoal);
+
             $responseCode = "0000";
             $message = "Sukses";
         }else {
