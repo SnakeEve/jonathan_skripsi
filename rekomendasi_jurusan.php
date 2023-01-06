@@ -94,6 +94,7 @@
                 success: function(result){
                     if(result.responseCode === "0000"){
                         alert("Berhasil menyimpan jawaban");
+                        window.location.href = url_local_project_root + "/index.php?page=history_rekomendasi";
                     }
                     else{
                         alert("Gagal menyimpan jawaban");

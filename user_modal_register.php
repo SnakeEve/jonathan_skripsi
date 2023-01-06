@@ -1,4 +1,4 @@
-<div id="user_modal" class="modal " tabindex="-1" role="dialog">
+<div id="user_modal" class="modal " tabindex="-1" role="dialog" style="overflow-y:scroll;">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">

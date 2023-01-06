@@ -127,7 +127,6 @@
                     'Content-Type': 'application/json'
                 },
                 "dataSrc": function ( value ) {
-                    console.log(value)
                     if (value.data === null || (value.data.list === null || value.data.list <= 0)) {
                         return [];
                     }
@@ -142,7 +141,8 @@
                     "render": function (data, type, row) {
                         var button_string = "";
                         button_string += '<div class="btn-group flex-wrap">';
-                        button_string += '<a href="index.php?page=mata_kuliah_jurusan&id_jurusan='+data+'" class="btn btn-success btn-sm" ><i class="fa fa-book"></i></a> ';
+                        button_string += '<a href="index.php?page=prospek_jurusan&id_jurusan='+data+'" class="btn btn-warning btn-sm" ><i class="fa fa-book"></i> PROSPEK KERJA</a> ';
+                        button_string += '<a href="index.php?page=mata_kuliah_jurusan&id_jurusan='+data+'" class="btn btn-success btn-sm" ><i class="fa fa-book"></i> MATA KULIAH</a> ';
                         button_string += '<button type="button" class="btn btn-info btn-sm btnModalDataUpdate" ><i class="fas fa-edit"></i></button> ';
                         button_string += '<button type="button" class="btn btn-danger btn-sm btnModalDataDelete" ><i class="fa fa-trash" aria-hidden="true"></i></button> ';
                         button_string += '</div>';

@@ -53,15 +53,13 @@ if(strcmp($responseCode, "0000") == 0){
                 ];   
 
     $_SESSION['admin'] = $params;
-    var_dump($params);
 
     header('Location: ../admin/index.php');
 
 }else{
     $params =   [   'responseCode' => $responseCode,
                     'message' => $message
-                ];  
-                var_dump($params);
+                ];
     header('Location: ../admin/login.php');
 }
 

@@ -3,13 +3,13 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <h1>Mata Kuliah</h1>
+                    <h1>Prospek Kerja</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item active"><a href="index.php?page=program_studi">Program Studi</a></li>
                         <li class="breadcrumb-item"><a href="#">Jurusan</a></li>
-                        <li class="breadcrumb-item active"><a href="#">Mata Kuliah</a></li>
+                        <li class="breadcrumb-item active"><a href="#">Prospek Kerja</a></li>
                     </ol>
                 </div>
             </div>
@@ -30,6 +30,7 @@
                                     </th>
                                         <th>ID</th>
                                         <th>Nama</th>
+                                        <th>Keterangan</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -70,6 +71,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>Keterangan</label>
+                                    <textarea type="text" class="form-control summernote_here" id="data_keterangan" placeholder="" required></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -87,6 +96,8 @@
     var submit_type;
 
     $(document).ready(function () {
+        $('.summernote_here').summernote();
+
         datatable_main = $('#main_datatable').DataTable({
             language: {
                 processing: "<span class='spinner-border spinner-border-sm'></span>"
@@ -103,7 +114,7 @@
             autoWidth: false,
             responsive: true,
             ajax: {
-                "url": "../api/admin/jurusan.php?apiname=detailMataKuliah&id_jurusan="+id_jurusan,
+                "url": "../api/admin/jurusan.php?apiname=detailProspekJurusan&id_jurusan="+id_jurusan,
                 "type": "GET",
                 "headers": {
                     'Content-Type': 'application/json'
@@ -129,7 +140,8 @@
                     }
                 },
                 {"data": "id"},
-                {"data": "nama"},
+                {"data": "nama_prospek"},
+                {"data": "keterangan"},
             ],
             columnDefs: [
                 {
@@ -158,11 +170,12 @@
 
             var formDataObject = {
                 id_jurusan: id_jurusan,
-                nama: $("#data_nama").val(),
+                nama_prospek: $("#data_nama").val(),
+                keterangan: $("#data_keterangan").val(),
             };
 
             $.ajax({
-                url: '../api/admin/jurusan.php?apiname=addMataKuliah',
+                url: '../api/admin/jurusan.php?apiname=addProspekJurusan',
                 type: 'POST',
                 data: JSON.stringify(formDataObject),
                 contentType: "application/json",
@@ -185,11 +198,11 @@
         $('#main_datatable tbody').on('click', '.btnModalDataDelete', function () {
             var data = datatable_main.row($(this).parents('tr')).data();
             var formDataObject = {
-                id_mata_kuliah: data.id,
+                id_prospek_jurusan: data.id,
             };
 
             $.ajax({
-                url: '../api/admin/jurusan.php?apiname=deleteMataKuliah',
+                url: '../api/admin/jurusan.php?apiname=deleteProspekJurusan',
                 type: 'POST',
                 data: JSON.stringify(formDataObject),
                 contentType: "application/json",

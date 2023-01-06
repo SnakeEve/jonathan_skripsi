@@ -7,7 +7,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     $email = strtolower($_POST['email']);
     $password = $_POST['password'];
     // $user_type = $_POST['user_type'];
-    $user_type = "M";
+    $user_type = "U";
     $sql = "SELECT id, nama, no_hp, agama, tanggal_lahir, tempat_lahir, user_type, jenis_kelamin
         from users
         where email = '$email' and password = '$password' and user_type = '$user_type' 
@@ -60,7 +60,7 @@ if(strcmp($responseCode, "0000") == 0){
     $params =   [   'responseCode' => $responseCode,
                     'message' => $message
                 ];  
-                var_dump($params);
+                
     header('Location: ../login.php');
 }
 

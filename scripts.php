@@ -11,6 +11,32 @@
 
     $(document).ready(function() {
         $("#user_status").on( "click", function() {
+            $.ajax({
+                url: url_local_project_root + "/api/user.php?apiname=detail&id="+<?php echo $id; ?>,
+                type: "GET",
+                data: {
+                    action: "list"
+                },
+                success: function(result) {
+                    let response = JSON.parse(result);
+                    let responseCode = response.responseCode;
+                    let message = response.message;
+
+                    if (responseCode == "0000") {
+                        console.log(response.data)
+                        $("#email").val(response.data.email);
+                        $("#nama_depan").val(response.data.nama);
+                        $("#nomor_telepon").val(response.data.no_hp);
+                        $("#agama").val(response.data.agama);
+                        $("#tanggal_lahir").val(response.data.tanggal_lahir);
+                        $("#tempat_lahir").val(response.data.tempat_lahir);
+                        $("#jenis_kelamin").val(response.data.jenis_kelamin);
+                    } else {
+                        console.log(message);
+                    }
+                }
+            });
+
             $("#user_modal").show();
             $('.nav-tabs a[href="#biodata"]').tab('show');
         });

@@ -35,6 +35,9 @@
                 case "mata_kuliah_jurusan":
                     include 'mata_kuliah_jurusan.php';
                     break;
+                case "prospek_jurusan":
+                    include 'prospek_jurusan.php';
+                    break;
                 //USERS
                 case "users":
                     include 'users.php';

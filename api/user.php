@@ -150,7 +150,7 @@ if(isset($_GET['apiname'])){
         // start web service detail
         if(isset($_GET['id'])){
             $id = $_GET['id'];
-            $sql = "SELECT id, nama, no_hp, agama, tanggal_lahir, tempat_lahir, user_type, jenis_kelamin
+            $sql = "SELECT id, nama, no_hp, agama, tanggal_lahir, tempat_lahir, user_type, jenis_kelamin, email 
                 from users
                 where id = $id " ;
             $res = runsqltext($sql);
@@ -164,6 +164,7 @@ if(isset($_GET['apiname'])){
                 $tempat_lahir = $row['tempat_lahir'];
                 $user_type = $row['user_type'];
                 $jenis_kelamin = $row['jenis_kelamin'];
+                $email = $row['email'];
 
                 $responseCode = "0000";
                 $message = "Sukses";
@@ -187,7 +188,8 @@ if(isset($_GET['apiname'])){
                                 'tanggal_lahir' => $tanggal_lahir,
                                 'tempat_lahir' => $tempat_lahir,
                                 'user_type' => $user_type,
-                                'jenis_kelamin' => $jenis_kelamin
+                                'jenis_kelamin' => $jenis_kelamin,
+                                'email' => $email
                             ]
                         ];   
         }else{
