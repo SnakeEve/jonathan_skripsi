@@ -36,6 +36,18 @@
                         '';
                     });
 
+                    let perguruan_tinggi_string = "";
+                    $.each(result.data.list_perguruan_tinggi, function( index, value ) {
+                        perguruan_tinggi_string += '' +
+                        '<tr>' +
+                        '   <td>' + value.nama + '</td>' +
+                        '   <td>' +
+                        '         <img data-src="' +value.foto+ '" alt="no image" src="' +value.foto+ '" data-holder-rendered="true" style="width:100px;height:100px;">' +
+                       '   </td>'
+                        '</tr>' +
+                        '';
+                    });
+
 
                     html_output_string += '' +
                     '<div class="container">' +
@@ -59,7 +71,7 @@
                     '   <div class="row">' +
                     '       <div class="col-md-12">' +
                     '           <div class="p-4">' +
-                    '               <h1 class="text-center">Mata Kuliah Teknik Informatika</h1>' +
+                    '               <h1 class="text-center">Mata Kuliah</h1>' +
                     '               <div class="card mb-0">' +
                     '                   <table class="table table-borderless">' +
                                             mata_kuliah_string +
@@ -75,6 +87,18 @@
                     '               <div class="card mb-0">' +
                     '                   <table class="table table-borderless">' +
                                             prospek_jurusan_string +
+                    '                   </table>' +
+                    '               </div>' +
+                    '           </div>' +
+                    '       </div>' +
+                    '   </div>' +
+                    '   <div class="row">' +
+                    '       <div class="col-md-12">' +
+                    '           <div class="p-4">' +
+                    '               <h1 class="text-center">Perguruan Tinggi Terdaftar</h1>' +
+                    '               <div class="card mb-0">' +
+                    '                   <table class="table table-borderless">' +
+                                            perguruan_tinggi_string +
                     '                   </table>' +
                     '               </div>' +
                     '           </div>' +
