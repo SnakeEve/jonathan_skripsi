@@ -142,6 +142,7 @@
                     "render": function (data, type, row) {
                         var button_string = "";
                         button_string += '<div class="btn-group flex-wrap">';
+                        button_string += '<a href="index.php?page=mata_kuliah_jurusan&id_jurusan='+data+'" class="btn btn-success btn-sm" ><i class="fa fa-book"></i></a> ';
                         button_string += '<button type="button" class="btn btn-info btn-sm btnModalDataUpdate" ><i class="fas fa-edit"></i></button> ';
                         button_string += '<button type="button" class="btn btn-danger btn-sm btnModalDataDelete" ><i class="fa fa-trash" aria-hidden="true"></i></button> ';
                         button_string += '</div>';
