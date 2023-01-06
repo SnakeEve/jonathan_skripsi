@@ -153,6 +153,7 @@ if(isset($_GET['apiname'])){
                     JOIN jurusan j on j.id = rk.id_jurusan
                     JOIN program_studi ps on ps.id = j.id_program_studi
                     WHERE 1=1
+                    and k.id = $id_kecerdasan
                     ORDER BY j.id asc";
                 $res = runsqltext($sql);
                 $list = array();
