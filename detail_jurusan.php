@@ -8,6 +8,7 @@
 
 <script>
     var jurusan_id = "<?php echo $_GET['jurusan_id'];?>";
+    var univ_id = "<?php echo  isset($_GET['univ_id'])? $_GET['univ_id']:"";?>";
     $(document).ready(function(){
         if(jurusan_id != null || jurusan_id != ''){
             $.ajax({
@@ -36,17 +37,34 @@
                         '';
                     });
 
+                    let perguruan_tinggi_element = "";
                     let perguruan_tinggi_string = "";
-                    $.each(result.data.list_perguruan_tinggi, function( index, value ) {
-                        perguruan_tinggi_string += '' +
-                        '<tr>' +
-                        '   <td>' + value.nama + '</td>' +
-                        '   <td>' +
-                        '         <img data-src="' +value.foto+ '" alt="no image" src="' +value.foto+ '" data-holder-rendered="true" style="width:100px;height:100px;">' +
-                       '   </td>'
-                        '</tr>' +
-                        '';
-                    });
+                    if(univ_id !=''){
+                        $.each(result.data.list_perguruan_tinggi, function( index, value ) {
+                            perguruan_tinggi_string += '' +
+                            '<tr>' +
+                            '   <td>' + value.nama + '</td>' +
+                            '   <td>' +
+                            '         <img data-src="' +value.foto+ '" alt="no image" src="' +value.foto+ '" data-holder-rendered="true" style="width:100px;height:100px;">' +
+                            '   </td>'
+                            '</tr>' +
+                            '';
+                        });
+                        perguruan_tinggi_element += '' +
+                        '   <div class="row">' +
+                        '       <div class="col-md-12">' +
+                        '           <div class="p-4">' +
+                        '               <h1 class="text-center">Perguruan Tinggi Terdaftar</h1>' +
+                        '               <div class="card mb-0">' +
+                        '                   <table class="table table-borderless">' +
+                                                perguruan_tinggi_string +
+                        '                   </table>' +
+                        '               </div>' +
+                        '           </div>' +
+                        '       </div>' +
+                        '   </div>' +
+                            '';
+                    }              
 
 
                     html_output_string += '' +
@@ -92,18 +110,7 @@
                     '           </div>' +
                     '       </div>' +
                     '   </div>' +
-                    '   <div class="row">' +
-                    '       <div class="col-md-12">' +
-                    '           <div class="p-4">' +
-                    '               <h1 class="text-center">Perguruan Tinggi Terdaftar</h1>' +
-                    '               <div class="card mb-0">' +
-                    '                   <table class="table table-borderless">' +
-                                            perguruan_tinggi_string +
-                    '                   </table>' +
-                    '               </div>' +
-                    '           </div>' +
-                    '       </div>' +
-                    '   </div>' +
+                    perguruan_tinggi_element +
                     '</div>';
                     
                     html_output_string = html_output_string.trim();

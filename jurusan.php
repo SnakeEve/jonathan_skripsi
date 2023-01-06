@@ -43,7 +43,7 @@
                         '               </div>' +
                         '           </h6>' +
                         '           <p class="card-text">' + truncate_elipsis(value.description) + '</p>' +
-                        '           <a href="index.php?page=detail_jurusan&jurusan_id='+value.id+'" class="btn btn-primary float-right">Selengkapnya</a>' +
+                        '           <a href="index.php?page=detail_jurusan&jurusan_id='+value.id+'&univ_id='+univ_id+'" class="btn btn-primary float-right">Selengkapnya</a>' +
                         '       </div>' +
                         '   </div>' +
                         '</div>';
