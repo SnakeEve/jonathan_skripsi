@@ -39,7 +39,7 @@
 
                     let perguruan_tinggi_element = "";
                     let perguruan_tinggi_string = "";
-                    if(univ_id !=''){
+                    if(univ_id ==''){
                         $.each(result.data.list_perguruan_tinggi, function( index, value ) {
                             perguruan_tinggi_string += '' +
                             '<tr>' +
