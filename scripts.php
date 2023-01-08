@@ -25,7 +25,7 @@
                     if (responseCode == "0000") {
                         console.log(response.data)
                         $("#email").val(response.data.email);
-                        $("#nama_depan").val(response.data.nama);
+                        $("#nama").val(response.data.nama);
                         $("#nomor_telepon").val(response.data.no_hp);
                         $("#agama").val(response.data.agama);
                         $("#tanggal_lahir").val(response.data.tanggal_lahir);

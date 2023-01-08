@@ -80,7 +80,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <textarea class="form-control" id="data_description" rows="5" required></textarea>
+                                    <textarea class="form-control summernote_here" id="data_description" rows="5" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -147,6 +147,8 @@
     var submit_type;
 
     $(document).ready(function () {
+        $('.summernote_here').summernote();
+        
         datatable_main = $('#main_datatable').DataTable({
             language: {
                 processing: "<span class='spinner-border spinner-border-sm'></span>"
