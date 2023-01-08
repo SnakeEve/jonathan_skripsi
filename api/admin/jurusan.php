@@ -133,12 +133,30 @@ if(isset($_GET['apiname'])){
             break;
         case 'insert':
         // start web service insert
-        $body = file_get_contents('php://input')."\n";
-        if($body != ''){
-            $data = json_decode($body, true);
+        if(isset($_POST['json'])){
+            $data = json_decode($_POST['json'], true);
             $id_program_studi = $data['id_program_studi'];
             $nama = $data['nama'];
             $description = $data['description'];
+            $photo =  htmlspecialchars($_FILES['photo']['name']);
+
+            //photo
+            $target = '';
+            $target_path_db = 'assets/jurusan/'.$photo;
+            $photo_url = realpath(__DIR__ . '/../..')."\assets\jurusan\\";
+            if (!$_FILES["photo"]["error"] > 0) {
+                $tmp_name = $_FILES["photo"]["tmp_name"];
+                if (@getimagesize($tmp_name) !== false) {
+                    $target = $photo;
+                    move_uploaded_file($tmp_name, $photo_url.$target);
+                } else {
+                    $responseCode = "0009";
+                    $message = "Format foto tidak sesuai";
+                }
+            } else {
+                $responseCode = "0009";
+                $message = "File tidak terbaca oleh sistem";
+            }
 
             $sqlCekJurusan = "SELECT id FROM jurusan
                 WHERE nama = '$nama' and id_program_studi = $id_program_studi ";
@@ -148,8 +166,8 @@ if(isset($_GET['apiname'])){
                 $responseCode = "0001";
                 $message = "Program Studi sudah terdaftar";
             } else {
-                $sql = "INSERT into jurusan (nama, id_program_studi, description, is_active) 
-                VALUES ('$nama', $id_program_studi, '$description' ,'T') ";
+                $sql = "INSERT into jurusan (nama, id_program_studi, description, foto, is_active) 
+                VALUES ('$nama', $id_program_studi, '$description' , '$target_path_db', 'T') ";
                 runSQLtext($sql);
                 $responseCode = "0000";
                 $message = "Sukses";
@@ -161,21 +179,36 @@ if(isset($_GET['apiname'])){
         }
         // end web service insert
         $params =   [   'responseCode' => $responseCode,
-                        'message' => $message,
-                        'data' =>[
-                            'body' => json_decode($body, true)
-                        ]
+                        'message' => $message
                     ];
         break;
         case 'update':
         // start web service update
-        $body = file_get_contents('php://input')."\n";
-        if($body != ''){
-            $data = json_decode($body, true);
+        if(isset($_POST['json'])){
+            $data = json_decode($_POST['json'], true);
             $id = $data['id'];
             $id_program_studi = $data['id_program_studi'];
             $nama = $data['nama'];
             $description = $data['description'];
+            $photo =  htmlspecialchars($_FILES['photo']['name']);
+
+            //photo
+            $target = '';
+            $target_path_db = 'assets/jurusan/'.$photo;
+            $photo_url = realpath(__DIR__ . '/../..')."\assets\jurusan\\";
+            if (!$_FILES["photo"]["error"] > 0) {
+                $tmp_name = $_FILES["photo"]["tmp_name"];
+                if (@getimagesize($tmp_name) !== false) {
+                    $target = $photo;
+                    move_uploaded_file($tmp_name, $photo_url.$target);
+                } else {
+                    $responseCode = "0009";
+                    $message = "Format foto tidak sesuai";
+                }
+            } else {
+                $responseCode = "0009";
+                $message = "File tidak terbaca oleh sistem";
+            }
 
             $sqlCekPerguruanTinggi = "SELECT id FROM jurusan
                 WHERE nama = '$nama' and id_program_studi = $id_program_studi and id <> $id ";
@@ -185,7 +218,7 @@ if(isset($_GET['apiname'])){
                 $responseCode = "0001";
                 $message = "Program studi sudah terdaftar";
             } else {
-                $sql = "UPDATE jurusan SET nama='$nama', description = '$description', id_program_studi =  $id_program_studi
+                $sql = "UPDATE jurusan SET nama='$nama', description = '$description', foto = '$target_path_db', id_program_studi =  $id_program_studi
                     WHERE id = $id ";
                 runSQLtext($sql);
                 $responseCode = "0000";
@@ -198,10 +231,7 @@ if(isset($_GET['apiname'])){
         }
         // end web service update
         $params =   [   'responseCode' => $responseCode,
-                        'message' => $message,
-                        'data' =>[
-                            'body' => json_decode($body, true)
-                        ]
+                        'message' => $message
                     ];
         break;
         case 'detail':

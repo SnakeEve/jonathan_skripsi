@@ -172,19 +172,25 @@
         $('#formData').on('submit', function (e) {
             e.preventDefault();
 
-            var formDataObject = {
+            let formData = new FormData();
+
+            var jsonString = {
                 id_perguruan_tinggi: univ_id,
                 nama: $("#data_nama").val(),
-                foto: $("#data_foto")[0].files[0],
             };
+
+            formData.append('json', JSON.stringify(jsonString));
+            formData.append('photo', $("#data_foto")[0].files[0]);
 
             $.ajax({
                 url: '../api/admin/perguruan_tinggi.php?apiname=addUkm',
                 type: 'POST',
-                data: JSON.stringify(formDataObject),
-                contentType: "application/json",
-                dataType: "json",
+                contentType: false,
+                processData: false,
+                data: formData,
+                beforeSend: function(){},
                 success: function (output) {
+                    output = JSON.parse(output);
                     if (output.responseCode === '0000') {
                         $('#ModalData').modal('hide');
                         datatable_main.ajax.reload();
