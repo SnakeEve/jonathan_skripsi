@@ -296,24 +296,28 @@
             e.preventDefault();
 
             if(submit_type == 'update'){
-                var formDataObject = {
+                let formData = new FormData();
+                var jsonString = {
                     id: $("#data_id").val(),
                     nama: $("#data_nama").val(),
                     description: $("#data_description").val(),
-                    foto: $("#data_foto")[0].files[0],
                     website: $("#data_website").val(),
                     no_telp: $("#data_telp").val(),
                     akreditasi: $("#data_akreditasi").val(),
                     email: $("#data_email").val()
-                };
+                }
+                formData.append('json', JSON.stringify(jsonString));
+                formData.append('photo', $("#data_foto")[0].files[0]);
 
                 $.ajax({
                     url: '../api/admin/perguruan_tinggi.php?apiname=update',
                     type: 'POST',
-                    data: JSON.stringify(formDataObject),
-                    contentType: "application/json",
-                    dataType: "json",
+                    contentType: false,
+	                processData: false,
+                    data: formData,
+	                beforeSend: function(){},
                     success: function (output) {
+                        output = JSON.parse(output);
                         if (output.responseCode === '0000') {
                             $('#ModalData').modal('hide');
                             datatable_main.ajax.reload();
@@ -327,23 +331,28 @@
                 });
             }
             else{
-                var formDataObject = {
+                let formData = new FormData();
+                var jsonString = {
+                    id: $("#data_id").val(),
                     nama: $("#data_nama").val(),
                     description: $("#data_description").val(),
-                    foto: $("#data_foto")[0].files[0],
                     website: $("#data_website").val(),
                     no_telp: $("#data_telp").val(),
                     akreditasi: $("#data_akreditasi").val(),
                     email: $("#data_email").val()
-                };
+                }
+                formData.append('json', JSON.stringify(jsonString));
+                formData.append('photo', $("#data_foto")[0].files[0]);
 
                 $.ajax({
                     url: '../api/admin/perguruan_tinggi.php?apiname=insert',
                     type: 'POST',
-                    data: JSON.stringify(formDataObject),
-                    contentType: "application/json",
-                    dataType: "json",
+                    contentType: false,
+	                processData: false,
+                    data: formData,
+	                beforeSend: function(){},
                     success: function (output) {
+                        output = JSON.parse(output);
                         if (output.responseCode === '0000') {
                             $('#ModalData').modal('hide');
                             datatable_main.ajax.reload();

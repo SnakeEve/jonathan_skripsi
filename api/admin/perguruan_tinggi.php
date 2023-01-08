@@ -69,16 +69,15 @@ if(isset($_GET['apiname'])){
         break;
         case 'insert':
         // start web service insert
-        $body = file_get_contents('php://input')."\n";
-        if($body != ''){
-            $data = json_decode($body, true);
+        if(isset($_POST['json'])){
+            $data = json_decode($_POST['json'], true);
             $nama = $data['nama'];
             $description = $data['description'];
             $website = $data['website'];
             $no_telp = $data['no_telp'];
             $akreditasi = $data['akreditasi'];
             $email = $data['email'];
-            //$photo =  $nama.htmlspecialchars($_FILES['photo']['name']);
+            $photo =  htmlspecialchars($_FILES['photo']['name']);
 
             $sqlCekPerguruanTinggi = "SELECT id FROM perguruan_tinggi
                 WHERE nama = '$nama' ";
@@ -90,16 +89,23 @@ if(isset($_GET['apiname'])){
             } else {
                 //photo
                 $target = '';
-                // $photo_url = '/assets/logo/';
-                // if (!$_FILES["photo"]["error"] > 0) {
-                //     $tmp_name = $_FILES["photo"]["tmp_name"];
-                //     if (@getimagesize($tmp_name) !== false) {
-                //         $target = $photo;
-                //         move_uploaded_file($tmp_name,$photo_url.$target);
-                //     }
-                // }
+                $target_path_db = 'assets/logo/'.$photo;
+                $photo_url = realpath(__DIR__ . '/../..')."\assets\logo\\";
+                if (!$_FILES["photo"]["error"] > 0) {
+                    $tmp_name = $_FILES["photo"]["tmp_name"];
+                    if (@getimagesize($tmp_name) !== false) {
+                        $target = $photo;
+                        move_uploaded_file($tmp_name, $photo_url.$target);
+                    } else {
+                        $responseCode = "0009";
+                        $message = "Format foto tidak sesuai";
+                    }
+                } else {
+                    $responseCode = "0009";
+                    $message = "File tidak terbaca oleh sistem";
+                }
                 $sql = "INSERT into perguruan_tinggi (nama, description, website, no_telp, akreditasi, email, foto, is_active)
-                VALUES ('$nama', '$description', '$website', '$no_telp', '$akreditasi', '$email', '$target', 'T') ";
+                VALUES ('$nama', '$description', '$website', '$no_telp', '$akreditasi', '$email', '$target_path_db', 'T') ";
                 runSQLtext($sql);
                 $responseCode = "0000";
                 $message = "Sukses";
@@ -111,17 +117,13 @@ if(isset($_GET['apiname'])){
         }
         // end web service insert
         $params =   [   'responseCode' => $responseCode,
-                        'message' => $message,
-                        'data' =>[
-                            'body' => json_decode($body, true)
-                        ]
-                    ];
+                        'message' => $message
+                    ];  
         break;
         case 'update':
         // start web service update
-        $body = file_get_contents('php://input')."\n";
-        if($body != ''){
-            $data = json_decode($body, true);
+        if(isset($_POST['json'])){
+            $data = json_decode($_POST['json'], true);
             $id = $data['id'];
             $nama = $data['nama'];
             $description = $data['description'];
@@ -129,6 +131,7 @@ if(isset($_GET['apiname'])){
             $no_telp = $data['no_telp'];
             $akreditasi = $data['akreditasi'];
             $email = $data['email'];
+            $photo =  htmlspecialchars($_FILES['photo']['name']);
 
             $sqlCekPerguruanTinggi = "SELECT id FROM perguruan_tinggi
                 WHERE nama = '$nama' and id <> $id ";
@@ -138,8 +141,25 @@ if(isset($_GET['apiname'])){
                 $responseCode = "0001";
                 $message = "Perguruan tinggi sudah terdaftar";
             } else {
+                //photo
+                $target = '';
+                $target_path_db = 'assets/logo/'.$photo;
+                $photo_url = realpath(__DIR__ . '/../..')."\assets\logo\\";
+                if (!$_FILES["photo"]["error"] > 0) {
+                    $tmp_name = $_FILES["photo"]["tmp_name"];
+                    if (@getimagesize($tmp_name) !== false) {
+                        $target = $photo;
+                        move_uploaded_file($tmp_name, $photo_url.$target);
+                    } else {
+                        $responseCode = "0009";
+                        $message = "Format foto tidak sesuai";
+                    }
+                } else {
+                    $responseCode = "0009";
+                    $message = "File tidak terbaca oleh sistem";
+                }
                 $sql = "UPDATE perguruan_tinggi SET nama='$nama', description='$description', website='$website', 
-                        no_telp='$no_telp',  akreditasi='$akreditasi',  email='$email'
+                        no_telp='$no_telp',  akreditasi='$akreditasi',  email='$email', foto = '$target_path_db'
                     WHERE id = $id ";
                 runSQLtext($sql);
                 $responseCode = "0000";
@@ -152,10 +172,7 @@ if(isset($_GET['apiname'])){
         }
         // end web service update
         $params =   [   'responseCode' => $responseCode,
-                        'message' => $message,
-                        'data' =>[
-                            'body' => json_decode($body, true)
-                        ]
+                        'message' => $message
                     ];
         break;
         case 'detail':
@@ -400,22 +417,40 @@ if(isset($_GET['apiname'])){
         break;
         case 'addFasilitas':
         // start web service addFasilitas
-        $body = file_get_contents('php://input')."\n";
-        if($body != ''){
-            $data = json_decode($body, true);
+        if(isset($_POST['json'])){
+            $data = json_decode($_POST['json'], true);
             $id_perguruan_tinggi = $data['id_perguruan_tinggi'];
-            $nama = $data['nama'];;
+            $nama = $data['nama'];
+            $photo =  htmlspecialchars($_FILES['photo']['name']);
+
+            //photo
+            $target = '';
+            $target_path_db = 'assets/fasilitas/'.$photo;
+            $photo_url = realpath(__DIR__ . '/../..')."\assets\\fasilitas\\";
+            if (!$_FILES["photo"]["error"] > 0) {
+                $tmp_name = $_FILES["photo"]["tmp_name"];
+                if (@getimagesize($tmp_name) !== false) {
+                    $target = $photo;
+                    move_uploaded_file($tmp_name, $photo_url.$target);
+                } else {
+                    $responseCode = "0009";
+                    $message = "Format foto tidak sesuai";
+                }
+            } else {
+                $responseCode = "0009";
+                $message = "File tidak terbaca oleh sistem";
+            }
 
             $sqlCekFasilitas = "SELECT id FROM fasilitas
                 WHERE nama = '$nama' and id_perguruan_tinggi = $id_perguruan_tinggi ";
             $res = runSQLtext($sqlCekFasilitas);
 
             if($res->num_rows > 0) {
-                $sql = "UPDATE fasilitas SET is_active = 'T' WHERE  id_perguruan_tinggi = $id_perguruan_tinggi and nama = '$nama'";
+                $sql = "UPDATE fasilitas SET is_active = 'T', foto = '$target_path_db' WHERE  id_perguruan_tinggi = $id_perguruan_tinggi and nama = '$nama'";
                 runSQLtext($sql);
             } else {
-                $sql = "INSERT into fasilitas (id_perguruan_tinggi, nama, is_active)
-                VALUES ($id_perguruan_tinggi, '$nama', 'T') ";
+                $sql = "INSERT into fasilitas (id_perguruan_tinggi, nama, foto, is_active)
+                VALUES ($id_perguruan_tinggi, '$nama', '$target_path_db',  'T') ";
                 runSQLtext($sql);
             }
             $responseCode = "0000";
@@ -427,10 +462,7 @@ if(isset($_GET['apiname'])){
         }
         // end web service addFasilitas
         $params =   [   'responseCode' => $responseCode,
-                        'message' => $message,
-                        'data' =>[
-                            'body' => json_decode($body, true)
-                        ]
+                        'message' => $message
                     ];
         break;
         case 'detailUkm':
@@ -496,22 +528,40 @@ if(isset($_GET['apiname'])){
         break;
         case 'addUkm':
         // start web service addUkm
-        $body = file_get_contents('php://input')."\n";
-        if($body != ''){
-            $data = json_decode($body, true);
+        if(isset($_POST['json'])){
+            $data = json_decode($_POST['json'], true);
             $id_perguruan_tinggi = $data['id_perguruan_tinggi'];
             $nama = $data['nama'];
+            $photo =  htmlspecialchars($_FILES['photo']['name']);
 
-            $sqlCekFasilitas = "SELECT id FROM ukm
+            //photo
+            $target = '';
+            $target_path_db = 'assets/ukm/'.$photo;
+            $photo_url = realpath(__DIR__ . '/../..')."\assets\ukm\\";
+            if (!$_FILES["photo"]["error"] > 0) {
+                $tmp_name = $_FILES["photo"]["tmp_name"];
+                if (@getimagesize($tmp_name) !== false) {
+                    $target = $photo;
+                    move_uploaded_file($tmp_name, $photo_url.$target);
+                } else {
+                    $responseCode = "0009";
+                    $message = "Format foto tidak sesuai";
+                }
+            } else {
+                $responseCode = "0009";
+                $message = "File tidak terbaca oleh sistem";
+            }
+
+            $sqlCekUkm = "SELECT id FROM ukm
                 WHERE nama = '$nama' and id_perguruan_tinggi = $id_perguruan_tinggi ";
-            $res = runSQLtext($sqlCekFasilitas);
+            $res = runSQLtext($sqlCekUkm);
 
             if($res->num_rows > 0) {
-                $sql = "UPDATE ukm SET is_active = 'T' WHERE  id_perguruan_tinggi = $id_perguruan_tinggi and nama = '$nama'";
+                $sql = "UPDATE ukm SET is_active = 'T', foto = '$target_path_db' WHERE  id_perguruan_tinggi = $id_perguruan_tinggi and nama = '$nama'";
                 runSQLtext($sql);
             } else {
-                $sql = "INSERT into ukm (id_perguruan_tinggi, nama, is_active)
-                VALUES ($id_perguruan_tinggi, '$nama', 'T') ";
+                $sql = "INSERT into ukm (id_perguruan_tinggi, nama, foto,  is_active)
+                VALUES ($id_perguruan_tinggi, '$nama', '$target_path_db', 'T') ";
                 runSQLtext($sql);
             }
             $responseCode = "0000";
@@ -523,10 +573,7 @@ if(isset($_GET['apiname'])){
         }
         // end web service addUkm
         $params =   [   'responseCode' => $responseCode,
-                        'message' => $message,
-                        'data' =>[
-                            'body' => json_decode($body, true)
-                        ]
+                        'message' => $message
                     ];
         break;
         default:
