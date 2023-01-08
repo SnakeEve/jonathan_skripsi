@@ -147,8 +147,6 @@
     var submit_type;
 
     $(document).ready(function () {
-        $('.summernote_here').summernote();
-        
         datatable_main = $('#main_datatable').DataTable({
             language: {
                 processing: "<span class='spinner-border spinner-border-sm'></span>"
@@ -283,7 +281,10 @@
 
             $("#data_id").val(row.data().id);
             $("#data_nama").val(row.data().nama);
-            $("#data_description").val(row.data().description);
+            // $("#data_description").val(row.data().description);
+            
+            $('#data_description').summernote('code', row.data().description);
+
             $("#data_website").val(row.data().website);
             $("#data_telp").val(row.data().no_telp);
             $("#data_akreditasi").val(row.data().akreditasi);
@@ -307,7 +308,9 @@
                     email: $("#data_email").val()
                 }
                 formData.append('json', JSON.stringify(jsonString));
-                formData.append('photo', $("#data_foto")[0].files[0]);
+                if( $("#data_foto")[0].files.length > 0){
+                    formData.append('photo', $("#data_foto")[0].files[0]);
+                }
 
                 $.ajax({
                     url: '../api/admin/perguruan_tinggi.php?apiname=update',

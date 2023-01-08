@@ -46,6 +46,11 @@
                 let html_output_string = "";
 
                 $.each(result.data.list, function( index, value ) {
+                    if(index == 0){
+                        html_output_string += '' +
+                            '<h3>Kecerdasan Dominan Anda Adalah</h3>';
+                        }
+
                     html_output_string += '' +
                         '<div class="callout callout-info">' +
                         '   <p>Hasil kategori kecerdasan anda adalah: '+value.nama+'</p>' +
@@ -85,6 +90,7 @@
                                 '               </div>' +
                                 '           </h6>' +
                                 '           <p class="card-text">' + truncate_elipsis(value.description) + '</p>' +
+                                '           <a href="index.php?page=detail_jurusan&jurusan_id='+value.id+'" class="btn btn-primary float-right">Selengkapnya</a>' +
                                 '       </div>' +
                                 '   </div>' + 
                                 '</div>';

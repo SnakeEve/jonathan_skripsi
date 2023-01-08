@@ -76,7 +76,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <textarea class="form-control" id="data_description" rows="5" required></textarea>
+                                    <textarea class="form-control summernote_here" id="data_description" rows="5" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -229,11 +229,12 @@
             var tr = $(this).closest('tr');
             var row = datatable_main.row(tr);
 
-            console.log(row.data())
-
             $("#data_id").val(row.data().id);
             $("#data_nama").val(row.data().nama_jurusan);
-            $("#data_description").val(row.data().description_jurusan);
+            
+            $('#data_description').summernote('code', row.data().description_jurusan);
+
+            // $("#data_description").val(row.data().description_jurusan);
 
             $('#ModalData').modal('show');
         });
@@ -250,7 +251,9 @@
                     description: $("#data_description").val(),
                 };
                 formData.append('json', JSON.stringify(jsonString));
-                formData.append('photo', $("#data_foto")[0].files[0]);
+                if( $("#data_foto")[0].files.length > 0){
+                    formData.append('photo', $("#data_foto")[0].files[0]);
+                }
 
                 $.ajax({
                     url: '../api/admin/jurusan.php?apiname=update',
