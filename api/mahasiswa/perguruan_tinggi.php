@@ -8,40 +8,51 @@ if(isset($_GET['apiname'])){
     switch($apiname){
         case 'list':
         // start web service list
-        $sqlSearchNama = "";
-        if(isset($_GET['nama'])){
-            $nama = $_GET['nama'];
-            $sqlSearchNama  = $sqlSearchNama . "AND upper(nama) like upper('%$nama%') ";
-        }
-        $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
+        $body = file_get_contents('php://input')."\n";
+        if($body != ''){
+            $data = json_decode($body, true);
+
+            $sqlSearchNama = "";
+            if(sizeof($data) > 0 && $data["nama"] != null){
+                $nama = $data['nama'];
+                $sqlSearchNama  = $sqlSearchNama . "AND upper(nama) like upper('%$nama%') ";
+            }
+
+            $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
             from perguruan_tinggi
             where is_active = 'T' ";
         
-        $sqlOrder = "order by id ";
-        $sql = $sql . $sqlSearchNama ;
-        $sql = $sql . $sqlOrder ;
-        $res = runsqltext($sql);
-        $list = array();
-        if($res->num_rows > 0){
-            while ($row = $res->fetch_object()) {
-                array_push($list, $row);
+            $sqlOrder = "order by id ";
+            $sql = $sql . $sqlSearchNama ;
+            $sql = $sql . $sqlOrder ;
+            $res = runsqltext($sql);
+            $list = array();
+            if($res->num_rows > 0){
+                while ($row = $res->fetch_object()) {
+                    array_push($list, $row);
+                }
+            }else{
+                $list = null;
             }
-        }else{
-            $list = null;
+            $responseCode = "0000";
+            $message = "Sukses";
+
+        }else {
+            $responseCode = "0009";
+            $message = "Missing Request for Delete";
         }
-        $responseCode = "0000";
-        $message = "Sukses";
+
         // end web service list
         if(strcmp($responseCode, "0000") == 0){
             $params =   [   'responseCode' => $responseCode,
-                            'message' => $message,
+                            'message' => $data,
                             'data' =>[
                                 'list' => $list
                             ]
                         ];   
         }else{
             $params =   [   'responseCode' => $responseCode,
-                            'message' => $message
+                            'message' => $data
                         ];  
         }
         break;

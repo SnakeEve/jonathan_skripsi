@@ -1,4 +1,13 @@
 <main role="main">
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="form-group">
+                    <input type="text" name="btnSearch" id="btnSearch" class="form-control" placeholder="SEARCH HERE!">
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row" id="data_container_location"></div>
@@ -8,14 +17,33 @@
 
 <script>
     $(document).ready(function(){
+        request_list();
+
+        $("#btnSearch").on("keyup change", function(e){
+            request_list($(this).val());
+        });
+
+    });
+
+    function request_list(search_string_parameter){
+        var search_string_object = {};
+
+        if(search_string_parameter != null || search_string_parameter != ''){
+            search_string_object = {
+                nama: search_string_parameter
+            };
+        }
+
         $.ajax({
             url: url_local_project_root + "/api/mahasiswa/perguruan_tinggi.php?apiname=list",
-            type: "GET",
+            // type: "GET",
+            type: "POST",
             dataType: "json",
+            data: JSON.stringify(search_string_object),
             success: function(result){
                 let html_output_string = "";
 
-                if(result.data.list.length > 0){
+                if(result.data.list != null && result.data.list.length > 0){
                     $.each(result.data.list, function( index, value ) {
                         html_output_string += '' +
                         '<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mb-4 ">' +
@@ -49,5 +77,5 @@
                 console.log(data);
             }
         });
-    });
+    }
 </script>
