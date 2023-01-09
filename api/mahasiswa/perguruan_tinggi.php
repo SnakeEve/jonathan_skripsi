@@ -13,7 +13,7 @@ if(isset($_GET['apiname'])){
             $data = json_decode($body, true);
 
             $sqlSearchNama = "";
-            if(sizeof($data) > 0 && $data["nama"] != null){
+            if(sizeof($data) > 0 && isset($data['nama'])){
                 $nama = $data['nama'];
                 $sqlSearchNama  = $sqlSearchNama . "AND upper(nama) like upper('%$nama%') ";
             }
