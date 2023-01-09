@@ -40,6 +40,11 @@ if(isset($_GET['apiname'])){
         break;
         case 'list_perguruan_tinggi_jurusan':
         // start web service list
+        $sqlSearchNama = "";
+        if(isset($_GET['nama'])){
+            $nama = $_GET['nama'];
+            $sqlSearchNama  = $sqlSearchNama . "AND upper(j.nama) like upper('%$nama%') ";
+        }
         if(isset($_GET['univ_id'])){
             $univ_id = $_GET['univ_id'];
             $sql = "SELECT j.id, j.nama, j.description, j.foto, pt.nama as nama_perguruan_tinggi
@@ -48,12 +53,18 @@ if(isset($_GET['apiname'])){
                 JOIN program_studi ps ON ps.id = j.id_program_studi
                 JOIN perguruan_tinggi pt on pt.id = jk.id_perguruan_tinggi
                 WHERE j.is_active = 'T' 
-                AND jk.id_perguruan_tinggi = $univ_id";
+                AND jk.id_perguruan_tinggi = $univ_id ";
+            $sqlOrder = "order by j.id ";
+            $sql = $sql . $sqlSearchNama ;
+            $sql = $sql . $sqlOrder ;
         } else {
             $sql = "SELECT j.id, j.nama, j.description, j.foto, '' as nama_perguruan_tinggi
                 FROM jurusan j
                 JOIN program_studi ps ON ps.id = j.id_program_studi
-                WHERE j.is_active = 'T'";
+                WHERE j.is_active = 'T' ";
+            $sqlOrder = "order by j.id ";
+            $sql = $sql . $sqlSearchNama ;
+            $sql = $sql . $sqlOrder ;
         }
         $res = runsqltext($sql);
         $list = array();

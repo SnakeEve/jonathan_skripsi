@@ -8,10 +8,18 @@ if(isset($_GET['apiname'])){
     switch($apiname){
         case 'list':
         // start web service list
+        $sqlSearchNama = "";
+        if(isset($_GET['nama'])){
+            $nama = $_GET['nama'];
+            $sqlSearchNama  = $sqlSearchNama . "AND upper(nama) like upper('%$nama%') ";
+        }
         $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
             from perguruan_tinggi
-            where is_active = 'T' 
-            order by id";
+            where is_active = 'T' ";
+        
+        $sqlOrder = "order by id ";
+        $sql = $sql . $sqlSearchNama ;
+        $sql = $sql . $sqlOrder ;
         $res = runsqltext($sql);
         $list = array();
         if($res->num_rows > 0){
