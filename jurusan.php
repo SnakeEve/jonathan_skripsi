@@ -1,4 +1,13 @@
 <main role="main">
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="form-group">
+                    <input type="text" name="btnSearch" id="btnSearch" class="form-control" placeholder="SEARCH HERE!">
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row" id="data_container_location"></div>
@@ -14,11 +23,39 @@
     } else {
         url = url_local_project_root + "/api/mahasiswa/jurusan.php?apiname=list_perguruan_tinggi_jurusan&univ_id=" + univ_id;
     }
+
     $(document).ready(function(){
+        request_list();
+
+        $("#btnSearch").on("keyup change", function(e){
+            request_list($(this).val());
+        });
+    });
+
+    function request_list(search_string_parameter){
+        var search_string_object = {};
+
+        if(search_string_parameter != null || search_string_parameter != ''){
+            if(univ_id==""){
+                search_string_object = {
+                    nama: search_string_parameter
+                };
+            }
+            else{
+                search_string_object = {
+                    nama: search_string_parameter,
+                    univ_id: univ_id
+                };
+            }
+            
+        }
+
         $.ajax({
             url: url,
-            type: "GET",
+            // type: "GET",
+            type: "POST",
             dataType: "json",
+            data: JSON.stringify(search_string_object),
             success: function(result){
                 let html_output_string = "";
 
@@ -58,5 +95,5 @@
                 console.log(data);
             }
         });
-    });
+    }
 </script>
