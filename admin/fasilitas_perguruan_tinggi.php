@@ -190,9 +190,7 @@
                 data: formData,
                 beforeSend: function(){},
                 success: function (output) {
-                    alert('a: '+output);
                     output = JSON.parse(output);
-                    alert('b: '+output);
                     if (output.responseCode === '0000') {
                         $('#ModalData').modal('hide');
                         datatable_main.ajax.reload();
