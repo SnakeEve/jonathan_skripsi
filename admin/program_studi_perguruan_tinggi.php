@@ -3,12 +3,12 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <h1>Program Studi</h1>
+                    <h1>Fakultas</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="index.php?page=universitas">Perguruan Tinggi</a></li>
-                        <li class="breadcrumb-item active"><a href="#">Program Studi</a></li>
+                        <li class="breadcrumb-item active"><a href="#">Fakultas</a></li>
                     </ol>
                 </div>
             </div>

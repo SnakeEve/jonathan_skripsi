@@ -18,6 +18,17 @@ if(isset($_GET['apiname'])){
                 $sqlSearchNama  = $sqlSearchNama . "AND upper(nama) like upper('%$nama%') ";
             }
 
+            $page = 1;
+            if(isset($data['page'])){
+                $page = $data['page'];
+            }
+            // set the number of items to display per page
+            $items_per_page = 12;
+
+            // build query
+            $offset = ($page - 1) * $items_per_page;
+            $sqlPage = "LIMIT ". $offset . "," . $items_per_page;
+
             $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
             from perguruan_tinggi
             where is_active = 'T' ";
@@ -25,6 +36,7 @@ if(isset($_GET['apiname'])){
             $sqlOrder = "order by id ";
             $sql = $sql . $sqlSearchNama ;
             $sql = $sql . $sqlOrder ;
+            $sql = $sql . $sqlPage ;
             $res = runsqltext($sql);
             $list = array();
             if($res->num_rows > 0){

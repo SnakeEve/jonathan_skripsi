@@ -22,7 +22,7 @@
                 <li class="nav-item">
                     <a href="index.php?page=program_studi" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
-                        <p>Program Studi</p>
+                        <p>Fakultas</p>
                     </a>
                 </li>
                 <li class="nav-item">
