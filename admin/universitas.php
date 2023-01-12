@@ -30,6 +30,7 @@
                                         <th>ID</th>
                                         <th>Nama</th>
                                         <th>Description</th>
+                                        <th>Pendaftaran</th>
                                         <th>Foto</th>
                                         <th>Website</th>
                                         <th>Telp</th>
@@ -81,6 +82,14 @@
                                 <div class="form-group">
                                     <label>Description</label>
                                     <textarea class="form-control summernote_here" id="data_description" rows="5" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>Pendaftaran</label>
+                                    <textarea class="form-control summernote_here" id="data_pendaftaran" rows="5" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -195,6 +204,7 @@
                 {"data": "id"},
                 {"data": "nama"},
                 {"data": "description"},
+                {"data": "pendaftaran"},
                 {
                     "data": "foto",
                     "render": function (data, type, row) {
@@ -284,6 +294,7 @@
             // $("#data_description").val(row.data().description);
             
             $('#data_description').summernote('code', row.data().description);
+            $('#data_pendaftaran').summernote('code', row.data().pendaftaran);
 
             $("#data_website").val(row.data().website);
             $("#data_telp").val(row.data().no_telp);
@@ -302,6 +313,7 @@
                     id: $("#data_id").val(),
                     nama: $("#data_nama").val(),
                     description: $("#data_description").val(),
+                    pendaftaran: $("#data_pendaftaran").val(),
                     website: $("#data_website").val(),
                     no_telp: $("#data_telp").val(),
                     akreditasi: $("#data_akreditasi").val(),
@@ -320,6 +332,7 @@
                     data: formData,
 	                beforeSend: function(){},
                     success: function (output) {
+                        console.log(output);
                         output = JSON.parse(output);
                         if (output.responseCode === '0000') {
                             $('#ModalData').modal('hide');
@@ -339,6 +352,7 @@
                     id: $("#data_id").val(),
                     nama: $("#data_nama").val(),
                     description: $("#data_description").val(),
+                    pendaftaran: $("#data_pendaftaran").val(),
                     website: $("#data_website").val(),
                     no_telp: $("#data_telp").val(),
                     akreditasi: $("#data_akreditasi").val(),

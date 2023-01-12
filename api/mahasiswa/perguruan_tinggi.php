@@ -29,7 +29,7 @@ if(isset($_GET['apiname'])){
             $offset = ($page - 1) * $items_per_page;
             $sqlPage = "LIMIT ". $offset . "," . $items_per_page;
 
-            $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
+            $sql = "SELECT id, nama, description, pendaftaran, foto, website, no_telp, akreditasi, email
             from perguruan_tinggi
             where is_active = 'T' ";
         
@@ -72,7 +72,7 @@ if(isset($_GET['apiname'])){
         // start web service detail
         if(isset($_GET['id'])){
             $id = $_GET['id'];
-            $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
+            $sql = "SELECT id, nama, description, pendaftaran, foto, website, no_telp, akreditasi, email
                 from perguruan_tinggi
                 where is_active = 'T' 
                 and id = $id
@@ -83,6 +83,7 @@ if(isset($_GET['apiname'])){
                 $id = $row['id'];
                 $nama = $row['nama'];
                 $description = $row['description'];
+                $pendaftaran = $row['pendaftaran'];
                 $foto = $row['foto'];
                 $website = $row['website'];
                 $no_telp = $row['no_telp'];
@@ -175,6 +176,7 @@ if(isset($_GET['apiname'])){
                                 'id' => $id,
                                 'nama' => $nama,
                                 'description' => $description,
+                                'pendaftaran' => $pendaftaran,
                                 'foto' => $foto,
                                 'website' => $website,
                                 'no_telp' => $no_telp,

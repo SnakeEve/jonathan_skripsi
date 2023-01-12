@@ -104,6 +104,14 @@
                     '   <div class="row">' +
                     '       <div class="col-md-12">' +
                     '           <div class="p-4">' +
+                    '               <h1 class="text-center">Pendaftaran</h1>' +
+                                        result.data.pendaftaran +
+                    '           </div>' +
+                    '       </div>' +
+                    '   </div>' +
+                    '   <div class="row">' +
+                    '       <div class="col-md-12">' +
+                    '           <div class="p-4">' +
                     '               <h1 class="text-center">Fakultas dan Jurusan</h1>' +
                     '           </div>' +
                                 program_studi_accordion_string +

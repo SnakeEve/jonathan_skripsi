@@ -8,7 +8,7 @@ if(isset($_GET['apiname'])){
     switch($apiname){
         case 'list_all':
             // start web service list
-            $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email, is_active
+            $sql = "SELECT id, nama, description, pendaftaran, foto, website, no_telp, akreditasi, email, is_active
                 from perguruan_tinggi 
                 order by id";
             $res = runsqltext($sql);
@@ -38,7 +38,7 @@ if(isset($_GET['apiname'])){
             break;
         case 'list':
         // start web service list
-        $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
+        $sql = "SELECT id, nama, description, pendaftaran, foto, website, no_telp, akreditasi, email
             from perguruan_tinggi
             where is_active = 'T' 
             order by id";
@@ -73,6 +73,7 @@ if(isset($_GET['apiname'])){
             $data = json_decode($_POST['json'], true);
             $nama = $data['nama'];
             $description = $data['description'];
+            $pendaftaran = $data['pendaftaran'];
             $website = $data['website'];
             $no_telp = $data['no_telp'];
             $akreditasi = $data['akreditasi'];
@@ -104,8 +105,8 @@ if(isset($_GET['apiname'])){
                     $responseCode = "0009";
                     $message = "File tidak terbaca oleh sistem";
                 }
-                $sql = "INSERT into perguruan_tinggi (nama, description, website, no_telp, akreditasi, email, foto, is_active)
-                VALUES ('$nama', '$description', '$website', '$no_telp', '$akreditasi', '$email', '$target_path_db', 'T') ";
+                $sql = "INSERT into perguruan_tinggi (nama, description, pendaftaran, website, no_telp, akreditasi, email, foto, is_active)
+                VALUES ('$nama', '$description', '$pendaftaran', '$website', '$no_telp', '$akreditasi', '$email', '$target_path_db', 'T') ";
                 runSQLtext($sql);
                 $responseCode = "0000";
                 $message = "Sukses";
@@ -127,6 +128,7 @@ if(isset($_GET['apiname'])){
             $id = $data['id'];
             $nama = $data['nama'];
             $description = $data['description'];
+            $pendaftaran = $data['pendaftaran'];
             $website = $data['website'];
             $no_telp = $data['no_telp'];
             $akreditasi = $data['akreditasi'];
@@ -158,7 +160,7 @@ if(isset($_GET['apiname'])){
                     $responseCode = "0009";
                     $message = "File tidak terbaca oleh sistem";
                 }
-                $sql = "UPDATE perguruan_tinggi SET nama='$nama', description='$description', website='$website', 
+                $sql = "UPDATE perguruan_tinggi SET nama='$nama', description='$description', pendaftaran = '$pendaftaran', website='$website', 
                         no_telp='$no_telp',  akreditasi='$akreditasi',  email='$email', foto = '$target_path_db'
                     WHERE id = $id ";
                 runSQLtext($sql);
@@ -179,7 +181,7 @@ if(isset($_GET['apiname'])){
         // start web service detail
         if(isset($_GET['id'])){
             $id = $_GET['id'];
-            $sql = "SELECT id, nama, description, foto, website, no_telp, akreditasi, email
+            $sql = "SELECT id, nama, description, pendaftaran, foto, website, no_telp, akreditasi, email
                 from perguruan_tinggi
                 where id = $id" ;
             $res = runsqltext($sql);
@@ -188,6 +190,7 @@ if(isset($_GET['apiname'])){
                 $id = $row['id'];
                 $nama = $row['nama'];
                 $description = $row['description'];
+                $description = $row['pendaftaran'];
                 $foto = $row['foto'];
                 $website = $row['website'];
                 $no_telp = $row['no_telp'];
@@ -212,6 +215,7 @@ if(isset($_GET['apiname'])){
                                 'id' => $id,
                                 'nama' => $nama,
                                 'description' => $description,
+                                'pendaftaran' => $pendaftaran,
                                 'foto' => $foto,
                                 'website' => $website,
                                 'no_telp' => $no_telp,
