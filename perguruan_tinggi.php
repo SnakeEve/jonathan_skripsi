@@ -7,6 +7,14 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-2 mb-2">
+            <div class="col-lg-6 col-md-6">
+                <button type="button" class="btn btn-primary w-100" id="btnPrev">PREV</button>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <button type="button" class="btn btn-primary w-100" id="btnNext">NEXT</button>
+            </div>
+        </div>
     </div>
     <div class="album py-5 bg-light">
         <div class="container">
@@ -16,11 +24,24 @@
 </main>
 
 <script>
+    var current_page = 1;
     $(document).ready(function(){
         request_list();
 
         $("#btnSearch").on("keyup change", function(e){
             request_list($(this).val());
+        });
+
+        $("#btnPrev").on("click", function(e){
+            if(current_page > 1){
+                current_page = current_page - 1;
+                request_list($('#btnSearch').val());
+            }
+        });
+        
+        $("#btnNext").on("click", function(e){
+            current_page = current_page + 1;
+            request_list($('#btnSearch').val());
         });
 
     });
@@ -30,7 +51,8 @@
 
         if(search_string_parameter != null || search_string_parameter != ''){
             search_string_object = {
-                nama: search_string_parameter
+                nama: search_string_parameter,
+                page: current_page
             };
         }
 
@@ -41,6 +63,7 @@
             dataType: "json",
             data: JSON.stringify(search_string_object),
             success: function(result){
+                console.log(result);
                 let html_output_string = "";
 
                 if(result.data.list != null && result.data.list.length > 0){
@@ -67,11 +90,13 @@
                         '   </div>' +
                         '</div>';
                     });
+                        
+                    html_output_string = html_output_string.trim();
+                    $("#data_container_location").empty().append(html_output_string);
                 }
-                
-                html_output_string = html_output_string.trim();
-
-                $("#data_container_location").empty().append(html_output_string);
+                else{
+                    current_page = current_page - 1;
+                }
             },
             error: function(data){
                 console.log(data);
