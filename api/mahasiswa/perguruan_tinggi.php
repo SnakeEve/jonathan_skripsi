@@ -29,11 +29,24 @@ if(isset($_GET['apiname'])){
             $offset = ($page - 1) * $items_per_page;
             $sqlPage = "LIMIT ". $offset . "," . $items_per_page;
 
+            $sqlTotal = "SELECT count(1) as total 
+            from perguruan_tinggi
+            where is_active = 'T' ";
+
             $sql = "SELECT id, nama, description, pendaftaran, foto, website, no_telp, akreditasi, email
             from perguruan_tinggi
             where is_active = 'T' ";
         
             $sqlOrder = "order by id ";
+
+            $sqlTotal = $sqlTotal . $sqlSearchNama ;
+            $res2 = runsqltext($sqlTotal);
+            $totalData = 0;
+            if($res2->num_rows > 0){
+                $rowTotal = $res2->fetch_assoc();
+                $totalData = $rowTotal['total'];
+            }
+
             $sql = $sql . $sqlSearchNama ;
             $sql = $sql . $sqlOrder ;
             $sql = $sql . $sqlPage ;
@@ -46,6 +59,7 @@ if(isset($_GET['apiname'])){
             }else{
                 $list = null;
             }
+
             $responseCode = "0000";
             $message = "Sukses";
 
@@ -59,6 +73,7 @@ if(isset($_GET['apiname'])){
             $params =   [   'responseCode' => $responseCode,
                             'message' => $data,
                             'data' =>[
+                                'totalData' => $totalData,
                                 'list' => $list
                             ]
                         ];   
