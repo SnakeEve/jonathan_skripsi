@@ -8,10 +8,15 @@
             </div>
         </div>
         <div class="row mt-2 mb-2">
-            <div class="col-lg-6 col-md-6">
+            <div class="col-lg-5 col-md-5">
                 <button type="button" class="btn btn-primary w-100" id="btnPrev">PREV</button>
             </div>
-            <div class="col-lg-6 col-md-6">
+            <div class="col-lg-2 col-md-2">
+                <div class="text-center">
+                    <div id="print_data_page">1 / 1</div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5">
                 <button type="button" class="btn btn-primary w-100" id="btnNext">NEXT</button>
             </div>
         </div>
@@ -25,6 +30,8 @@
 
 <script>
     var current_page = 1;
+    var total_data = 0;
+    var total_page = 0;
     $(document).ready(function(){
         request_list();
 
@@ -65,6 +72,13 @@
             success: function(result){
                 console.log(result);
                 let html_output_string = "";
+
+                total_data = parseInt(result.data.totalData);
+                // total_page = parseInt(total_data/12);
+                total_page = Math.ceil(total_data/12);
+
+                
+                $("#print_data_page").empty().append(current_page+" / "+total_page);
 
                 if(result.data.list != null && result.data.list.length > 0){
                     $.each(result.data.list, function( index, value ) {
