@@ -77,8 +77,11 @@
                 // total_page = parseInt(total_data/12);
                 total_page = Math.ceil(total_data/12);
 
-                
-                $("#print_data_page").empty().append(current_page+" / "+total_page);
+                var totalString = "Total Data: "+total_data +"<br/>" +
+                        current_page+" / "+total_page;
+
+
+                $("#print_data_page").empty().append(totalString);
 
                 if(result.data.list != null && result.data.list.length > 0){
                     $.each(result.data.list, function( index, value ) {
